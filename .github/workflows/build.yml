@@ -14,10 +14,6 @@ permissions:
   actions: read
   packages: read
 
-env:
-  ALGoOrgSettings: ${{ vars.ALGoOrgSettings }}
-  ALGoRepoSettings: ${{ vars.ALGoRepoSettings }}
-
 jobs:
   build:
     name: Compile and test AL project

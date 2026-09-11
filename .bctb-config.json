@@ -1,0 +1,14 @@
+{
+  "$schema": "https://raw.githubusercontent.com/waldo1001/waldo.BCTelemetryBuddy/main/packages/mcp/config-schema.json",
+  "connectionName": "My BC Environment",
+  "authFlow": "vscode_auth",
+  "tenantId": "00000000-0000-0000-0000-000000000000",
+  "applicationInsightsAppId": "00000000-0000-0000-0000-000000000000",
+  "kustoClusterUrl": "https://ade.applicationinsights.io/subscriptions/YOUR-SUBSCRIPTION-ID",
+  "cacheEnabled": true,
+  "cacheTTLSeconds": 3600,
+  "removePII": false,
+  "workspacePath": "${workspaceFolder}",
+  "queriesFolder": "queries",
+  "references": []
+}
