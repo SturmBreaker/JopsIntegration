@@ -1,0 +1,52 @@
+name: Build AL Extension
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+      - develop
+  pull_request:
+
+permissions:
+  contents: read
+  actions: read
+  packages: read
+
+env:
+  ALGoOrgSettings: ${{ vars.ALGoOrgSettings }}
+  ALGoRepoSettings: ${{ vars.ALGoRepoSettings }}
+
+jobs:
+  build:
+    name: Compile and test AL project
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Read AL-Go settings
+        id: settings
+        uses: microsoft/AL-Go-Actions/ReadSettings@v9.2
+        with:
+          shell: powershell
+          project: .
+
+      - name: Read GitHub secrets
+        id: secrets
+        uses: microsoft/AL-Go-Actions/ReadSecrets@v9.2
+        with:
+          shell: powershell
+          gitHubSecrets: ${{ toJson(secrets) }}
+
+      - name: Build and test
+        uses: microsoft/AL-Go-Actions/RunPipeline@v9.2
+        env:
+          Secrets: ${{ steps.secrets.outputs.Secrets }}
+        with:
+          shell: powershell
+          project: .
+          buildMode: Default
+          token: ${{ github.token }}

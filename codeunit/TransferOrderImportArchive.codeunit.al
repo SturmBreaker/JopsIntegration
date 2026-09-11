@@ -1,0 +1,82 @@
+namespace Jops.Trial;
+
+codeunit 50140 "Jops TO Import Archive"
+{
+    TableNo = "Jops TO Import Header";
+
+    trigger OnRun()
+    begin
+        ArchiveFiltered(0D, 0D, '', '');
+    end;
+
+    procedure ArchiveFiltered(FromDate: Date; ToDate: Date; TransferOrderNo: Code[20]; ItemNo: Code[20])
+    var
+        ImportHeader: Record "Jops TO Import Header";
+    begin
+        ImportHeader.SetFilter(Status, '<>%1', ImportHeader.Status::Pending);
+        if (FromDate <> 0D) and (ToDate <> 0D) then
+            ImportHeader.SetRange("Order Date", FromDate, ToDate)
+        else
+            if FromDate <> 0D then
+                ImportHeader.SetFilter("Order Date", '>=%1', FromDate)
+            else
+                if ToDate <> 0D then
+                    ImportHeader.SetFilter("Order Date", '<=%1', ToDate);
+        if TransferOrderNo <> '' then
+            ImportHeader.SetRange("Transfer Order No.", TransferOrderNo);
+
+        if ImportHeader.FindSet() then
+            repeat
+                if (ItemNo = '') or HasItem(ImportHeader."Entry No.", ItemNo) then
+                    ArchiveHeader(ImportHeader);
+            until ImportHeader.Next() = 0;
+    end;
+
+    local procedure HasItem(HeaderEntryNo: Integer; ItemNo: Code[20]): Boolean
+    var
+        ImportLine: Record "Jops TO Import Line";
+    begin
+        ImportLine.SetRange("Header Entry No.", HeaderEntryNo);
+        ImportLine.SetRange("Item No.", ItemNo);
+        exit(not ImportLine.IsEmpty());
+    end;
+
+    local procedure ArchiveHeader(var ImportHeader: Record "Jops TO Import Header")
+    var
+        ArchiveHeader: Record "Jops TO Import Header Archive";
+        ImportLine: Record "Jops TO Import Line";
+        ArchiveLine: Record "Jops TO Import Line Archive";
+    begin
+        ArchiveHeader.Init();
+        ArchiveHeader."Entry No." := ImportHeader."Entry No.";
+        ArchiveHeader."External Document No." := ImportHeader."External Document No.";
+        ArchiveHeader."Transfer-from Code" := ImportHeader."Transfer-from Code";
+        ArchiveHeader."Transfer-to Code" := ImportHeader."Transfer-to Code";
+        ArchiveHeader."Order Date" := ImportHeader."Order Date";
+        ArchiveHeader.Status := ImportHeader.Status;
+        ArchiveHeader."Error Message" := ImportHeader."Error Message";
+        ArchiveHeader."Received At" := ImportHeader."Received At";
+        ArchiveHeader."Transfer Order No." := ImportHeader."Transfer Order No.";
+        ArchiveHeader."Webhook Status" := ImportHeader."Webhook Status";
+        ArchiveHeader."Webhook Error Message" := ImportHeader."Webhook Error Message";
+        ArchiveHeader."Archived At" := CurrentDateTime();
+        ArchiveHeader.Insert();
+
+        ImportLine.SetRange("Header Entry No.", ImportHeader."Entry No.");
+        if ImportLine.FindSet() then
+            repeat
+                ArchiveLine.Init();
+                ArchiveLine."Entry No." := ImportLine."Entry No.";
+                ArchiveLine."Header Entry No." := ImportLine."Header Entry No.";
+                ArchiveLine."Line No." := ImportLine."Line No.";
+                ArchiveLine."External Line No." := ImportLine."External Line No.";
+                ArchiveLine."Item No." := ImportLine."Item No.";
+                ArchiveLine.Description := ImportLine.Description;
+                ArchiveLine.Quantity := ImportLine.Quantity;
+                ArchiveLine.Insert();
+            until ImportLine.Next() = 0;
+
+        ImportLine.DeleteAll();
+        ImportHeader.Delete();
+    end;
+}

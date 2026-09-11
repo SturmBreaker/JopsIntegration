@@ -1,0 +1,10 @@
+.alpackages/
+.altestrunner/
+.snapshots/
+.vscode/launch.json
+.vscode/rad.json
+.vscode/.alcache/
+*.app
+*.zip
+ErrorLogs/
+TestResults/
