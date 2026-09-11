@@ -41,7 +41,6 @@ jobs:
       - name: Build and test
         uses: microsoft/AL-Go-Actions/RunPipeline@v9.2
         env:
-          Settings: ${{ steps.settings.outputs.Settings }}
           Secrets: ${{ steps.secrets.outputs.Secrets }}
         with:
           shell: powershell
