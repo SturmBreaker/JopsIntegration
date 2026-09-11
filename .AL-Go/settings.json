@@ -1,0 +1,13 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/AL-Go-Actions/v9.2/.Modules/settings.schema.json",
+  "country": "w1",
+  "appFolders": [
+    "."
+  ],
+  "testFolders": [],
+  "bcptTestFolders": [],
+  "artifact": "https://bcartifacts.azureedge.net/sandbox/28.0.0.0/w1",
+  "enableCodeCop": true,
+  "doNotPublishApps": true,
+  "doNotRunTests": true
+}
