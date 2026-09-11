@@ -38,12 +38,20 @@ jobs:
           gitHubSecrets: ${{ toJson(secrets) }}
           getSecrets: 'licenseFileUrl,codeSignCertificateUrl,*codeSignCertificatePassword,keyVaultCertificateUrl,*keyVaultCertificatePassword,keyVaultClientId,gitHubPackagesContext,applicationInsightsConnectionString'
 
+      - name: Determine ArtifactUrl
+        id: determineArtifactUrl
+        uses: microsoft/AL-Go-Actions/DetermineArtifactUrl@v9.2
+        with:
+          shell: powershell
+          project: .
+
       - name: Build and test
         uses: microsoft/AL-Go-Actions/RunPipeline@v9.2
         env:
           Secrets: ${{ steps.secrets.outputs.Secrets }}
         with:
           shell: powershell
+          artifact: ${{ env.artifact }}
           project: .
           buildMode: Default
           token: ${{ github.token }}
