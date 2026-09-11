@@ -1,6 +1,5 @@
 {
   "country": "w1",
-  "artifact": "https://bcartifacts.azureedge.net/sandbox/28.0.*/w1/latest",
   "type": "PTE",
   "enableCodeCop": true,
   "enableAppSourceCop": false,

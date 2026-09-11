@@ -6,7 +6,6 @@
   ],
   "testFolders": [],
   "bcptTestFolders": [],
-  "artifact": "https://bcartifacts.azureedge.net/sandbox/28.0.*/w1/latest",
   "enableCodeCop": true,
   "doNotPublishApps": true,
   "doNotRunTests": true
