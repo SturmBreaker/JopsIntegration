@@ -8,5 +8,8 @@
   "bcptTestFolders": [],
   "enableCodeCop": true,
   "doNotPublishApps": true,
-  "doNotRunTests": true
+  "doNotRunTests": true,
+  "workspaceCompilation": {
+    "enabled": false
+  }
 }
