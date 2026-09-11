@@ -55,3 +55,36 @@ jobs:
           project: .
           buildMode: Default
           token: ${{ github.token }}
+
+      - name: Calculate Artifact names
+        id: calculateArtifactsNames
+        if: success() || failure()
+        uses: microsoft/AL-Go-Actions/CalculateArtifactNames@v9.2
+        with:
+          shell: powershell
+          project: .
+          buildMode: Default
+
+      - name: Upload Apps artifact
+        if: success() || failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.calculateArtifactsNames.outputs.AppsArtifactsName }}
+          path: './.buildartifacts/Apps/'
+          if-no-files-found: error
+
+      - name: Upload Dependencies artifact
+        if: success() || failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.calculateArtifactsNames.outputs.DependenciesArtifactsName }}
+          path: './.buildartifacts/Dependencies/'
+          if-no-files-found: ignore
+
+      - name: Upload TestApps artifact
+        if: success() || failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.calculateArtifactsNames.outputs.TestAppsArtifactsName }}
+          path: './.buildartifacts/TestApps/'
+          if-no-files-found: ignore
