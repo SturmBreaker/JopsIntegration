@@ -82,7 +82,7 @@ codeunit 50110 "Jops SO Import Archive"
         ImportHeader.Delete();
     end;
 
-    local procedure GetArchiveStatus(Status: Option Pending,Processed,Error): Option Pending,Processed,Error
+    local procedure GetArchiveStatus(Status: Option Pending,Created,Error): Option Pending,Created,Error
     begin
         exit(Status);
     end;

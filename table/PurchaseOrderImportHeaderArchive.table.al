@@ -11,7 +11,7 @@ table 50121 "Jops PO Import Header Archive"
         field(3; "Vendor No."; Code[20]) { }
         field(4; "Order Date"; Date) { }
         field(5; "Currency Code"; Code[10]) { }
-        field(6; Status; Option) { OptionMembers = Pending,Processed,Error; }
+        field(6; Status; Option) { OptionMembers = Pending,Created,Error; }
         field(7; "Error Message"; Text[250]) { }
         field(8; "Received At"; DateTime) { }
         field(9; "Purchase Order No."; Code[20]) { }

@@ -54,7 +54,7 @@ page 50143 "Jops TO Import Header List"
                 ApplicationArea = All;
                 Caption = 'Archive Staging';
                 Image = Archive;
-                ToolTip = 'Archive processed and errored transfer staging records using optional filters.';
+                ToolTip = 'Archive created and errored transfer staging records using optional filters.';
 
                 trigger OnAction()
                 begin

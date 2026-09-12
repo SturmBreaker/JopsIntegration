@@ -61,7 +61,7 @@ codeunit 50148 "Jops Order Integration Tests"
     end;
 
     [Test]
-    procedure TransferArchiveMovesProcessedHeaderAndLines()
+    procedure TransferArchiveMovesCreatedHeaderAndLines()
     var
         ImportHeader: Record "Jops TO Import Header";
         ImportLine: Record "Jops TO Import Line";
@@ -71,7 +71,7 @@ codeunit 50148 "Jops Order Integration Tests"
         EntryNo: Integer;
     begin
         ImportHeader.Init();
-        ImportHeader.Status := ImportHeader.Status::Processed;
+        ImportHeader.Status := ImportHeader.Status::Created;
         ImportHeader."Transfer Order No." := 'TO-TEST-001';
         ImportHeader.Insert();
         EntryNo := ImportHeader."Entry No.";
@@ -86,16 +86,16 @@ codeunit 50148 "Jops Order Integration Tests"
         Archive.ArchiveFiltered(0D, 0D, 'TO-TEST-001', 'TEST-ITEM');
 
         if ImportHeader.Get(EntryNo) then
-            Error('Processed transfer staging header should be deleted after archiving.');
+            Error('Created transfer staging header should be deleted after archiving.');
         if ImportLine.Get(ImportLine."Entry No.") then
-            Error('Processed transfer staging line should be deleted after archiving.');
+            Error('Created transfer staging line should be deleted after archiving.');
         if not ArchiveHeader.Get(EntryNo) then
             Error('Transfer archive header should be created.');
         if not ArchiveLine.Get(ImportLine."Entry No.") then
             Error('Transfer archive line should be created.');
     end;
 
-    local procedure AssertStatus(ActualStatus: Option Pending,Processed,Error; ExpectedStatus: Option Pending,Processed,Error; FailureMessage: Text)
+    local procedure AssertStatus(ActualStatus: Option Pending,Created,Error; ExpectedStatus: Option Pending,Created,Error; FailureMessage: Text)
     begin
         if ActualStatus <> ExpectedStatus then
             Error(FailureMessage);

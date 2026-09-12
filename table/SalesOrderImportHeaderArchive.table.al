@@ -13,7 +13,7 @@ table 50108 "Jops SO Import Header Archive"
         field(5; "Currency Code"; Code[10]) { }
         field(6; Status; Option)
         {
-            OptionMembers = Pending,Processed,Error;
+            OptionMembers = Pending,Created,Error;
         }
         field(7; "Error Message"; Text[250]) { }
         field(8; "Received At"; DateTime) { }

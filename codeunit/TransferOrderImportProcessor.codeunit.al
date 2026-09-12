@@ -30,7 +30,7 @@ codeunit 50135 "Jops TO Import Processor"
 
         repeat
             if Codeunit.Run(Codeunit::"Jops TO Import Worker", ImportHeader) then begin
-                ImportHeader.Status := ImportHeader.Status::Processed;
+                ImportHeader.Status := ImportHeader.Status::Created;
                 ImportHeader."Error Message" := '';
             end else begin
                 ImportHeader.Status := ImportHeader.Status::Error;
