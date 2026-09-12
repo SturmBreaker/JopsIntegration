@@ -1,5 +1,7 @@
 namespace Jops.Trial;
 
+using Microsoft.Inventory.Transfer;
+
 table 50138 "TO Import Header Archive"
 {
     Caption = 'Transfer Order Import Header Archive';
@@ -18,6 +20,16 @@ table 50138 "TO Import Header Archive"
         field(10; "Webhook Status"; Option) { OptionMembers = Pending,Sent,Error; }
         field(11; "Webhook Error Message"; Text[250]) { }
         field(12; "Archived At"; DateTime) { }
+        field(13; "Shipment No."; Code[20])
+        {
+            TableRelation = "Transfer Shipment Header"."No.";
+            ValidateTableRelation = false;
+        }
+        field(14; "Receipt No."; Code[20])
+        {
+            TableRelation = "Transfer Receipt Header"."No.";
+            ValidateTableRelation = false;
+        }
     }
 
     keys

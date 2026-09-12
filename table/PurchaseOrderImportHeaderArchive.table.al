@@ -1,5 +1,7 @@
 namespace Jops.Trial;
 
+using Microsoft.Purchases.History;
+
 table 50121 "PO Import Header Archive"
 {
     Caption = 'Purchase Order Import Header Archive';
@@ -18,6 +20,16 @@ table 50121 "PO Import Header Archive"
         field(10; "Webhook Status"; Option) { OptionMembers = Pending,Sent,Error; }
         field(11; "Webhook Error Message"; Text[250]) { }
         field(12; "Archived At"; DateTime) { }
+        field(13; "Receipt No."; Code[20])
+        {
+            TableRelation = "Purch. Rcpt. Header"."No.";
+            ValidateTableRelation = false;
+        }
+        field(14; "Invoice No."; Code[20])
+        {
+            TableRelation = "Purch. Inv. Header"."No.";
+            ValidateTableRelation = false;
+        }
     }
 
     keys

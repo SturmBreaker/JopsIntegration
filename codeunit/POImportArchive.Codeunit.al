@@ -57,6 +57,8 @@ codeunit 50123 "PO Import Archive"
         ArchiveHeaderRecord."Error Message" := ImportHeader."Error Message";
         ArchiveHeaderRecord."Received At" := ImportHeader."Received At";
         ArchiveHeaderRecord."Purchase Order No." := ImportHeader."Purchase Order No.";
+        ArchiveHeaderRecord."Receipt No." := ImportHeader."Receipt No.";
+        ArchiveHeaderRecord."Invoice No." := ImportHeader."Invoice No.";
         ArchiveHeaderRecord."Webhook Status" := ImportHeader."Webhook Status";
         ArchiveHeaderRecord."Webhook Error Message" := ImportHeader."Webhook Error Message";
         ArchiveHeaderRecord."Archived At" := CurrentDateTime();

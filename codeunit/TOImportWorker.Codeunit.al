@@ -17,6 +17,9 @@ codeunit 50136 "TO Import Worker"
         TransferHeader: Record "Transfer Header";
         TransferLine: Record "Transfer Line";
         ImportLine: Record "TO Import Line";
+        TransferShipmentHeader: Record "Transfer Shipment Header";
+        TransferReceiptHeader: Record "Transfer Receipt Header";
+        TransferOrderNo: Code[20];
         NextLineNo: Integer;
     begin
         TransferHeader.Init();
@@ -53,10 +56,20 @@ codeunit 50136 "TO Import Worker"
             NextLineNo += 10000;
         until ImportLine.Next() = 0;
 
+        TransferOrderNo := TransferHeader."No.";
         if not Codeunit.Run(Codeunit::"TransferOrder-Post Transfer", TransferHeader) then
             Error('Transfer order %1 could not be posted through receipt. %2', TransferHeader."No.", GetLastErrorText());
 
-        ImportHeader."Transfer Order No." := TransferHeader."No.";
+        TransferShipmentHeader.SetRange("Transfer Order No.", TransferOrderNo);
+        if not TransferShipmentHeader.FindFirst() then
+            Error('Posted shipment for transfer order %1 could not be found.', TransferOrderNo);
+        TransferReceiptHeader.SetRange("Transfer Order No.", TransferOrderNo);
+        if not TransferReceiptHeader.FindFirst() then
+            Error('Posted receipt for transfer order %1 could not be found.', TransferOrderNo);
+
+        ImportHeader."Transfer Order No." := TransferOrderNo;
+        ImportHeader."Shipment No." := TransferShipmentHeader."No.";
+        ImportHeader."Receipt No." := TransferReceiptHeader."No.";
         ImportHeader.Modify(true);
     end;
 }

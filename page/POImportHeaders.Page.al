@@ -25,6 +25,8 @@ page 50124 "PO Import Headers"
             field(status; Rec.Status) { ToolTip = 'Specifies the processing status of the purchase import.'; }
             field(errorMessage; Rec."Error Message") { ToolTip = 'Specifies the error message recorded during processing.'; }
             field(purchaseOrderNo; Rec."Purchase Order No.") { ToolTip = 'Specifies the created purchase order number.'; }
+            field(receiptNo; Rec."Receipt No.") { ToolTip = 'Specifies the posted purchase receipt number.'; }
+            field(invoiceNo; Rec."Invoice No.") { ToolTip = 'Specifies the posted purchase invoice number.'; }
             field(webhookStatus; Rec."Webhook Status") { ToolTip = 'Specifies the status of the purchase status webhook.'; }
             field(webhookErrorMessage; Rec."Webhook Error Message") { ToolTip = 'Specifies the error message from the purchase status webhook.'; }
             field(receivedAt; Rec."Received At") { ToolTip = 'Specifies when the purchase import was received.'; }

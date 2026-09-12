@@ -1,5 +1,7 @@
 namespace Jops.Trial;
 
+using Microsoft.Inventory.Transfer;
+
 table 50132 "TO Import Header"
 {
     Caption = 'Transfer Order Import Header';
@@ -17,6 +19,16 @@ table 50132 "TO Import Header"
         field(9; "Transfer Order No."; Code[20]) { }
         field(10; "Webhook Status"; Option) { OptionMembers = Pending,Sent,Error; }
         field(11; "Webhook Error Message"; Text[250]) { }
+        field(12; "Shipment No."; Code[20])
+        {
+            TableRelation = "Transfer Shipment Header"."No.";
+            ValidateTableRelation = false;
+        }
+        field(13; "Receipt No."; Code[20])
+        {
+            TableRelation = "Transfer Receipt Header"."No.";
+            ValidateTableRelation = false;
+        }
     }
 
     keys
