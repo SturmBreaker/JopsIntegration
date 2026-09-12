@@ -118,6 +118,7 @@ jobs:
             SyncMode = 'ForceSync'
             DependencyInstallMode = 'default'
             continuousDeployment = $true
+            Projects = '*'
           }
           $configuration = $configuration | ConvertTo-Json -Depth 5 -Compress
           Add-Content -Path $env:GITHUB_OUTPUT -Value 'json<<DEPLOYMENT_JSON'
