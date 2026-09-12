@@ -98,7 +98,7 @@ jobs:
           $zipPath = Join-Path $env:RUNNER_TEMP 'apps-artifact.zip'
           New-Item -ItemType Directory -Path $artifactRoot -Force | Out-Null
           Invoke-WebRequest -Headers $headers -Uri $appsArtifact.archive_download_url -OutFile $zipPath
-          Expand-Archive -Path $zipPath -DestinationPath (Join-Path $artifactRoot 'Apps') -Force
+          Expand-Archive -Path $zipPath -DestinationPath (Join-Path $artifactRoot $appsArtifact.name) -Force
           Add-Content -Path $env:GITHUB_OUTPUT -Value "runId=$($run.id)"
           Add-Content -Path $env:GITHUB_OUTPUT -Value "artifactName=$($appsArtifact.name)"
           Write-Host "Downloaded $($appsArtifact.name) from run $($run.id) ($($run.head_sha))."
