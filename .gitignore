@@ -8,3 +8,4 @@
 *.zip
 ErrorLogs/
 TestResults/
+.vscode/
