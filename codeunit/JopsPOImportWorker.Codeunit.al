@@ -8,6 +8,7 @@ codeunit 50119 "Jops PO Import Worker"
 
     trigger OnRun()
     begin
+        Rec.TestField(Status, Rec.Status::Pending);
         CreatePurchaseOrder(Rec);
     end;
 

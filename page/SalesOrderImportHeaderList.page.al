@@ -53,7 +53,7 @@ page 50103 "Jops SO Import Header List"
                 ApplicationArea = All;
                 Caption = 'Archive Staging';
                 Image = Archive;
-                ToolTip = 'Archive created and errored staging records using optional date, sales order, and item filters.';
+                ToolTip = 'Archive processed and errored staging records using optional date, sales order, and item filters.';
 
                 trigger OnAction()
                 var

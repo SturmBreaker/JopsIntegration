@@ -8,6 +8,7 @@ codeunit 50106 "Jops SO Import Worker"
 
     trigger OnRun()
     begin
+        Rec.TestField(Status, Rec.Status::Pending);
         CreateSalesOrder(Rec);
     end;
 

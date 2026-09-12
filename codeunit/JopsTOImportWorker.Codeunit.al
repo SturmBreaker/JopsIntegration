@@ -8,6 +8,7 @@ codeunit 50136 "Jops TO Import Worker"
 
     trigger OnRun()
     begin
+        Rec.TestField(Status, Rec.Status::Pending);
         CreateTransferOrder(Rec);
     end;
 

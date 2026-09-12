@@ -53,7 +53,7 @@ page 50127 "Jops PO Import Header List"
                 ApplicationArea = All;
                 Caption = 'Archive Staging';
                 Image = Archive;
-                ToolTip = 'Archive created and errored purchase staging records using optional filters.';
+                ToolTip = 'Archive processed and errored purchase staging records using optional filters.';
 
                 trigger OnAction()
                 var

@@ -43,24 +43,24 @@ codeunit 50123 "Jops PO Import Archive"
 
     local procedure ArchiveHeader(var ImportHeader: Record "Jops PO Import Header")
     var
-        ArchiveHeader: Record "Jops PO Import Header Archive";
+        ArchiveHeaderRecord: Record "Jops PO Import Header Archive";
         ImportLine: Record "Jops PO Import Line";
         ArchiveLine: Record "Jops PO Import Line Archive";
     begin
-        ArchiveHeader.Init();
-        ArchiveHeader."Entry No." := ImportHeader."Entry No.";
-        ArchiveHeader."External Document No." := ImportHeader."External Document No.";
-        ArchiveHeader."Vendor No." := ImportHeader."Vendor No.";
-        ArchiveHeader."Order Date" := ImportHeader."Order Date";
-        ArchiveHeader."Currency Code" := ImportHeader."Currency Code";
-        ArchiveHeader.Status := ImportHeader.Status;
-        ArchiveHeader."Error Message" := ImportHeader."Error Message";
-        ArchiveHeader."Received At" := ImportHeader."Received At";
-        ArchiveHeader."Purchase Order No." := ImportHeader."Purchase Order No.";
-        ArchiveHeader."Webhook Status" := ImportHeader."Webhook Status";
-        ArchiveHeader."Webhook Error Message" := ImportHeader."Webhook Error Message";
-        ArchiveHeader."Archived At" := CurrentDateTime();
-        ArchiveHeader.Insert();
+        ArchiveHeaderRecord.Init();
+        ArchiveHeaderRecord."Entry No." := ImportHeader."Entry No.";
+        ArchiveHeaderRecord."External Document No." := ImportHeader."External Document No.";
+        ArchiveHeaderRecord."Vendor No." := ImportHeader."Vendor No.";
+        ArchiveHeaderRecord."Order Date" := ImportHeader."Order Date";
+        ArchiveHeaderRecord."Currency Code" := ImportHeader."Currency Code";
+        ArchiveHeaderRecord.Status := ImportHeader.Status;
+        ArchiveHeaderRecord."Error Message" := ImportHeader."Error Message";
+        ArchiveHeaderRecord."Received At" := ImportHeader."Received At";
+        ArchiveHeaderRecord."Purchase Order No." := ImportHeader."Purchase Order No.";
+        ArchiveHeaderRecord."Webhook Status" := ImportHeader."Webhook Status";
+        ArchiveHeaderRecord."Webhook Error Message" := ImportHeader."Webhook Error Message";
+        ArchiveHeaderRecord."Archived At" := CurrentDateTime();
+        ArchiveHeaderRecord.Insert();
 
         ImportLine.SetRange("Header Entry No.", ImportHeader."Entry No.");
         if ImportLine.FindSet() then
