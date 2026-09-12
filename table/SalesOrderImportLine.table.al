@@ -1,6 +1,6 @@
 namespace Jops.Trial;
 
-table 50102 "Jops SO Import Line"
+table 50102 "SO Import Line"
 {
     Caption = 'Sales Order Import Line';
 
@@ -12,7 +12,7 @@ table 50102 "Jops SO Import Line"
         }
         field(2; "Header Entry No."; Integer)
         {
-            TableRelation = "Jops SO Import Header"."Entry No.";
+            TableRelation = "SO Import Header"."Entry No.";
         }
         field(3; "Line No."; Integer) { }
         field(4; "External Line No."; Code[50]) { }

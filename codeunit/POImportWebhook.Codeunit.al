@@ -1,15 +1,15 @@
 namespace Jops.Trial;
 
-codeunit 50107 "Jops SO Import Webhook"
+codeunit 50120 "PO Import Webhook"
 {
-    TableNo = "Jops SO Import Header";
+    TableNo = "PO Import Header";
 
     trigger OnRun()
     begin
         SendStatus(Rec);
     end;
 
-    local procedure SendStatus(ImportHeader: Record "Jops SO Import Header")
+    local procedure SendStatus(ImportHeader: Record "PO Import Header")
     var
         Client: HttpClient;
         Content: HttpContent;
@@ -18,11 +18,11 @@ codeunit 50107 "Jops SO Import Webhook"
         Payload: JsonObject;
         RequestBody: Text;
     begin
-        // Replace this placeholder with the external system's webhook endpoint.
+        // Replace this placeholder with the external system's purchase webhook endpoint.
         Payload.Add('entryNo', ImportHeader."Entry No.");
         Payload.Add('externalDocumentNo', ImportHeader."External Document No.");
         Payload.Add('status', Format(ImportHeader.Status));
-        Payload.Add('salesOrderNo', ImportHeader."Sales Order No.");
+        Payload.Add('purchaseOrderNo', ImportHeader."Purchase Order No.");
         Payload.Add('errorMessage', ImportHeader."Error Message");
         Payload.WriteTo(RequestBody);
 
@@ -32,13 +32,13 @@ codeunit 50107 "Jops SO Import Webhook"
         ContentHeaders.Add('Content-Type', 'application/json');
 
         if not Client.Post(WebhookEndpoint(), Content, Response) then
-            Error('The sales order status webhook request could not be sent.');
+            Error('The purchase order status webhook request could not be sent.');
         if not Response.IsSuccessStatusCode() then
-            Error('The sales order status webhook returned HTTP status %1.', Response.HttpStatusCode());
+            Error('The purchase order status webhook returned HTTP status %1.', Response.HttpStatusCode());
     end;
 
     local procedure WebhookEndpoint(): Text
     begin
-        exit('https://REPLACE-WITH-ACTUAL-ENDPOINT');
+        exit('https://REPLACE-WITH-PURCHASE-ENDPOINT');
     end;
 }

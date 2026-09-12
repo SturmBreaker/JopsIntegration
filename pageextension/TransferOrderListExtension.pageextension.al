@@ -2,7 +2,7 @@ namespace Jops.Trial;
 
 using Microsoft.Inventory.Transfer;
 
-pageextension 50146 "Jops TO List Extension" extends "Transfer Orders"
+pageextension 50146 "TO List Extension" extends "Transfer Orders"
 {
     layout
     {

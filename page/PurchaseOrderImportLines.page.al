@@ -1,9 +1,9 @@
 namespace Jops.Trial;
 
-page 50125 "Jops PO Import Lines"
+page 50125 "PO Import Lines"
 {
     PageType = API;
-    SourceTable = "Jops PO Import Line";
+    SourceTable = "PO Import Line";
     APIPublisher = 'jops';
     APIGroup = 'staging';
     APIVersion = 'v1.0';
@@ -16,15 +16,15 @@ page 50125 "Jops PO Import Lines"
     {
         area(content)
         {
-            field(id; Rec.SystemId) { }
-            field(entryNo; Rec."Entry No.") { }
-            field(headerEntryNo; Rec."Header Entry No.") { }
-            field(lineNo; Rec."Line No.") { }
-            field(externalLineNo; Rec."External Line No.") { }
-            field(itemNo; Rec."Item No.") { }
-            field(description; Rec.Description) { }
-            field(quantity; Rec.Quantity) { }
-            field(unitCost; Rec."Unit Cost") { }
+            field(id; Rec.SystemId) { ToolTip = 'Specifies the unique identifier of the purchase import line.'; }
+            field(entryNo; Rec."Entry No.") { ToolTip = 'Specifies the entry number of the purchase import line.'; }
+            field(headerEntryNo; Rec."Header Entry No.") { ToolTip = 'Specifies the entry number of the related purchase import header.'; }
+            field(lineNo; Rec."Line No.") { ToolTip = 'Specifies the line number of the purchase import line.'; }
+            field(externalLineNo; Rec."External Line No.") { ToolTip = 'Specifies the line number from the external source system.'; }
+            field(itemNo; Rec."Item No.") { ToolTip = 'Specifies the item to add to the purchase order.'; }
+            field(description; Rec.Description) { ToolTip = 'Specifies the description of the purchase import line.'; }
+            field(quantity; Rec.Quantity) { ToolTip = 'Specifies the quantity to add to the purchase order.'; }
+            field(unitCost; Rec."Unit Cost") { ToolTip = 'Specifies the direct unit cost for the purchase order line.'; }
         }
     }
 }

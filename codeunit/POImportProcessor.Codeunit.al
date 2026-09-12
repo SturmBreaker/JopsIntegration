@@ -1,8 +1,8 @@
 namespace Jops.Trial;
 
-codeunit 50135 "Jops TO Import Processor"
+codeunit 50118 "PO Import Processor"
 {
-    TableNo = "Jops TO Import Header";
+    TableNo = "PO Import Header";
 
     trigger OnRun()
     begin
@@ -11,25 +11,25 @@ codeunit 50135 "Jops TO Import Processor"
 
     procedure ProcessPending()
     var
-        ImportHeader: Record "Jops TO Import Header";
+        ImportHeader: Record "PO Import Header";
     begin
         ImportHeader.SetRange(Status, ImportHeader.Status::Pending);
         ProcessHeaders(ImportHeader);
     end;
 
-    procedure ProcessSelected(var ImportHeader: Record "Jops TO Import Header")
+    procedure ProcessSelected(var ImportHeader: Record "PO Import Header")
     begin
         ImportHeader.SetRange(Status, ImportHeader.Status::Pending);
         ProcessHeaders(ImportHeader);
     end;
 
-    local procedure ProcessHeaders(var ImportHeader: Record "Jops TO Import Header")
+    local procedure ProcessHeaders(var ImportHeader: Record "PO Import Header")
     begin
         if not ImportHeader.FindSet() then
             exit;
 
         repeat
-            if Codeunit.Run(Codeunit::"Jops TO Import Worker", ImportHeader) then begin
+            if Codeunit.Run(Codeunit::"PO Import Worker", ImportHeader) then begin
                 ImportHeader.Status := ImportHeader.Status::Processed;
                 ImportHeader."Error Message" := '';
             end else begin
@@ -41,7 +41,7 @@ codeunit 50135 "Jops TO Import Processor"
             ImportHeader.Modify(true);
             Commit();
 
-            if Codeunit.Run(Codeunit::"Jops TO Import Webhook", ImportHeader) then begin
+            if Codeunit.Run(Codeunit::"PO Import Webhook", ImportHeader) then begin
                 ImportHeader."Webhook Status" := ImportHeader."Webhook Status"::Sent;
                 ImportHeader."Webhook Error Message" := '';
             end else begin

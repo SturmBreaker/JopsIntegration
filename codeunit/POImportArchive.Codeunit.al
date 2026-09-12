@@ -1,17 +1,17 @@
 namespace Jops.Trial;
 
-codeunit 50140 "Jops TO Import Archive"
+codeunit 50123 "PO Import Archive"
 {
-    TableNo = "Jops TO Import Header";
+    TableNo = "PO Import Header";
 
     trigger OnRun()
     begin
         ArchiveFiltered(0D, 0D, '', '');
     end;
 
-    procedure ArchiveFiltered(FromDate: Date; ToDate: Date; TransferOrderNo: Code[20]; ItemNo: Code[20])
+    procedure ArchiveFiltered(FromDate: Date; ToDate: Date; PurchaseOrderNo: Code[20]; ItemNo: Code[20])
     var
-        ImportHeader: Record "Jops TO Import Header";
+        ImportHeader: Record "PO Import Header";
     begin
         ImportHeader.SetFilter(Status, '<>%1', ImportHeader.Status::Pending);
         if (FromDate <> 0D) and (ToDate <> 0D) then
@@ -22,8 +22,8 @@ codeunit 50140 "Jops TO Import Archive"
             else
                 if ToDate <> 0D then
                     ImportHeader.SetFilter("Order Date", '<=%1', ToDate);
-        if TransferOrderNo <> '' then
-            ImportHeader.SetRange("Transfer Order No.", TransferOrderNo);
+        if PurchaseOrderNo <> '' then
+            ImportHeader.SetRange("Purchase Order No.", PurchaseOrderNo);
 
         if ImportHeader.FindSet() then
             repeat
@@ -34,29 +34,29 @@ codeunit 50140 "Jops TO Import Archive"
 
     local procedure HasItem(HeaderEntryNo: Integer; ItemNo: Code[20]): Boolean
     var
-        ImportLine: Record "Jops TO Import Line";
+        ImportLine: Record "PO Import Line";
     begin
         ImportLine.SetRange("Header Entry No.", HeaderEntryNo);
         ImportLine.SetRange("Item No.", ItemNo);
         exit(not ImportLine.IsEmpty());
     end;
 
-    local procedure ArchiveHeader(var ImportHeader: Record "Jops TO Import Header")
+    local procedure ArchiveHeader(var ImportHeader: Record "PO Import Header")
     var
-        ArchiveHeaderRecord: Record "Jops TO Import Header Archive";
-        ImportLine: Record "Jops TO Import Line";
-        ArchiveLine: Record "Jops TO Import Line Archive";
+        ArchiveHeaderRecord: Record "PO Import Header Archive";
+        ImportLine: Record "PO Import Line";
+        ArchiveLine: Record "PO Import Line Archive";
     begin
         ArchiveHeaderRecord.Init();
         ArchiveHeaderRecord."Entry No." := ImportHeader."Entry No.";
         ArchiveHeaderRecord."External Document No." := ImportHeader."External Document No.";
-        ArchiveHeaderRecord."Transfer-from Code" := ImportHeader."Transfer-from Code";
-        ArchiveHeaderRecord."Transfer-to Code" := ImportHeader."Transfer-to Code";
+        ArchiveHeaderRecord."Vendor No." := ImportHeader."Vendor No.";
         ArchiveHeaderRecord."Order Date" := ImportHeader."Order Date";
+        ArchiveHeaderRecord."Currency Code" := ImportHeader."Currency Code";
         ArchiveHeaderRecord.Status := ImportHeader.Status;
         ArchiveHeaderRecord."Error Message" := ImportHeader."Error Message";
         ArchiveHeaderRecord."Received At" := ImportHeader."Received At";
-        ArchiveHeaderRecord."Transfer Order No." := ImportHeader."Transfer Order No.";
+        ArchiveHeaderRecord."Purchase Order No." := ImportHeader."Purchase Order No.";
         ArchiveHeaderRecord."Webhook Status" := ImportHeader."Webhook Status";
         ArchiveHeaderRecord."Webhook Error Message" := ImportHeader."Webhook Error Message";
         ArchiveHeaderRecord."Archived At" := CurrentDateTime();
@@ -73,6 +73,7 @@ codeunit 50140 "Jops TO Import Archive"
                 ArchiveLine."Item No." := ImportLine."Item No.";
                 ArchiveLine.Description := ImportLine.Description;
                 ArchiveLine.Quantity := ImportLine.Quantity;
+                ArchiveLine."Unit Cost" := ImportLine."Unit Cost";
                 ArchiveLine.Insert();
             until ImportLine.Next() = 0;
 

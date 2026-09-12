@@ -1,15 +1,15 @@
 namespace Jops.Trial;
 
-codeunit 50120 "Jops PO Import Webhook"
+codeunit 50137 "TO Import Webhook"
 {
-    TableNo = "Jops PO Import Header";
+    TableNo = "TO Import Header";
 
     trigger OnRun()
     begin
         SendStatus(Rec);
     end;
 
-    local procedure SendStatus(ImportHeader: Record "Jops PO Import Header")
+    local procedure SendStatus(ImportHeader: Record "TO Import Header")
     var
         Client: HttpClient;
         Content: HttpContent;
@@ -18,11 +18,11 @@ codeunit 50120 "Jops PO Import Webhook"
         Payload: JsonObject;
         RequestBody: Text;
     begin
-        // Replace this placeholder with the external system's purchase webhook endpoint.
+        // Replace this placeholder with the external system's transfer webhook endpoint.
         Payload.Add('entryNo', ImportHeader."Entry No.");
         Payload.Add('externalDocumentNo', ImportHeader."External Document No.");
         Payload.Add('status', Format(ImportHeader.Status));
-        Payload.Add('purchaseOrderNo', ImportHeader."Purchase Order No.");
+        Payload.Add('transferOrderNo', ImportHeader."Transfer Order No.");
         Payload.Add('errorMessage', ImportHeader."Error Message");
         Payload.WriteTo(RequestBody);
 
@@ -32,13 +32,13 @@ codeunit 50120 "Jops PO Import Webhook"
         ContentHeaders.Add('Content-Type', 'application/json');
 
         if not Client.Post(WebhookEndpoint(), Content, Response) then
-            Error('The purchase order status webhook request could not be sent.');
+            Error('The transfer order status webhook request could not be sent.');
         if not Response.IsSuccessStatusCode() then
-            Error('The purchase order status webhook returned HTTP status %1.', Response.HttpStatusCode());
+            Error('The transfer order status webhook returned HTTP status %1.', Response.HttpStatusCode());
     end;
 
     local procedure WebhookEndpoint(): Text
     begin
-        exit('https://REPLACE-WITH-PURCHASE-ENDPOINT');
+        exit('https://REPLACE-WITH-TRANSFER-ENDPOINT');
     end;
 }

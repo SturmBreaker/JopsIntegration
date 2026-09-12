@@ -1,6 +1,6 @@
 namespace Jops.Trial;
 
-table 50133 "Jops TO Import Line"
+table 50133 "TO Import Line"
 {
     Caption = 'Transfer Order Import Line';
 
@@ -9,7 +9,7 @@ table 50133 "Jops TO Import Line"
         field(1; "Entry No."; Integer) { AutoIncrement = true; }
         field(2; "Header Entry No."; Integer)
         {
-            TableRelation = "Jops TO Import Header"."Entry No.";
+            TableRelation = "TO Import Header"."Entry No.";
         }
         field(3; "Line No."; Integer) { }
         field(4; "External Line No."; Code[50]) { }

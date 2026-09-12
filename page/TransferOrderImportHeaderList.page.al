@@ -1,9 +1,9 @@
 namespace Jops.Trial;
 
-page 50143 "Jops TO Import Header List"
+page 50143 "TO Import Header List"
 {
     PageType = List;
-    SourceTable = "Jops TO Import Header";
+    SourceTable = "TO Import Header";
     ApplicationArea = All;
     UsageCategory = Lists;
 
@@ -13,17 +13,17 @@ page 50143 "Jops TO Import Header List"
         {
             repeater(General)
             {
-                field("Entry No."; Rec."Entry No.") { ApplicationArea = All; }
-                field("External Document No."; Rec."External Document No.") { ApplicationArea = All; }
-                field("Transfer-from Code"; Rec."Transfer-from Code") { ApplicationArea = All; }
-                field("Transfer-to Code"; Rec."Transfer-to Code") { ApplicationArea = All; }
-                field("Order Date"; Rec."Order Date") { ApplicationArea = All; }
-                field(Status; Rec.Status) { ApplicationArea = All; }
-                field("Transfer Order No."; Rec."Transfer Order No.") { ApplicationArea = All; }
-                field("Received At"; Rec."Received At") { ApplicationArea = All; }
-                field("Error Message"; Rec."Error Message") { ApplicationArea = All; }
-                field("Webhook Status"; Rec."Webhook Status") { ApplicationArea = All; }
-                field("Webhook Error Message"; Rec."Webhook Error Message") { ApplicationArea = All; }
+                field("Entry No."; Rec."Entry No.") { ApplicationArea = All; ToolTip = 'Specifies the entry number of the transfer import.'; }
+                field("External Document No."; Rec."External Document No.") { ApplicationArea = All; ToolTip = 'Specifies the document number from the external source system.'; }
+                field("Transfer-from Code"; Rec."Transfer-from Code") { ApplicationArea = All; ToolTip = 'Specifies the location from which the transfer order originates.'; }
+                field("Transfer-to Code"; Rec."Transfer-to Code") { ApplicationArea = All; ToolTip = 'Specifies the location to which the transfer order is sent.'; }
+                field("Order Date"; Rec."Order Date") { ApplicationArea = All; ToolTip = 'Specifies the order date for the transfer order.'; }
+                field(Status; Rec.Status) { ApplicationArea = All; ToolTip = 'Specifies the processing status of the transfer import.'; }
+                field("Transfer Order No."; Rec."Transfer Order No.") { ApplicationArea = All; ToolTip = 'Specifies the created transfer order number.'; }
+                field("Received At"; Rec."Received At") { ApplicationArea = All; ToolTip = 'Specifies when the transfer import was received.'; }
+                field("Error Message"; Rec."Error Message") { ApplicationArea = All; ToolTip = 'Specifies the error message recorded during processing.'; }
+                field("Webhook Status"; Rec."Webhook Status") { ApplicationArea = All; ToolTip = 'Specifies the status of the transfer status webhook.'; }
+                field("Webhook Error Message"; Rec."Webhook Error Message") { ApplicationArea = All; ToolTip = 'Specifies the error message from the transfer status webhook.'; }
             }
         }
     }
@@ -41,8 +41,8 @@ page 50143 "Jops TO Import Header List"
 
                 trigger OnAction()
                 var
-                    ImportProcessor: Codeunit "Jops TO Import Processor";
-                    ImportHeader: Record "Jops TO Import Header";
+                    ImportProcessor: Codeunit "TO Import Processor";
+                    ImportHeader: Record "TO Import Header";
                 begin
                     CurrPage.SetSelectionFilter(ImportHeader);
                     ImportProcessor.ProcessSelected(ImportHeader);
@@ -58,7 +58,7 @@ page 50143 "Jops TO Import Header List"
 
                 trigger OnAction()
                 begin
-                    Report.RunModal(Report::"Jops TO Archive Report");
+                    Report.RunModal(Report::"TO Archive Report");
                     CurrPage.Update(false);
                 end;
             }

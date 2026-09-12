@@ -2,7 +2,7 @@ namespace Jops.Trial;
 
 using Microsoft.Sales.Document;
 
-pageextension 50114 "Jops SO List Extension" extends "Sales Order List"
+pageextension 50114 "SO List Extension" extends "Sales Order List"
 {
     layout
     {

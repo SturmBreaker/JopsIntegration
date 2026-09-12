@@ -1,9 +1,9 @@
 namespace Jops.Trial;
 
-page 50127 "Jops PO Import Header List"
+page 50127 "PO Import Header List"
 {
     PageType = List;
-    SourceTable = "Jops PO Import Header";
+    SourceTable = "PO Import Header";
     ApplicationArea = All;
     UsageCategory = Lists;
 
@@ -13,16 +13,16 @@ page 50127 "Jops PO Import Header List"
         {
             repeater(General)
             {
-                field("Entry No."; Rec."Entry No.") { ApplicationArea = All; }
-                field("External Document No."; Rec."External Document No.") { ApplicationArea = All; }
-                field("Vendor No."; Rec."Vendor No.") { ApplicationArea = All; }
-                field("Order Date"; Rec."Order Date") { ApplicationArea = All; }
-                field(Status; Rec.Status) { ApplicationArea = All; }
-                field("Purchase Order No."; Rec."Purchase Order No.") { ApplicationArea = All; }
-                field("Received At"; Rec."Received At") { ApplicationArea = All; }
-                field("Error Message"; Rec."Error Message") { ApplicationArea = All; }
-                field("Webhook Status"; Rec."Webhook Status") { ApplicationArea = All; }
-                field("Webhook Error Message"; Rec."Webhook Error Message") { ApplicationArea = All; }
+                field("Entry No."; Rec."Entry No.") { ApplicationArea = All; ToolTip = 'Specifies the entry number of the purchase import.'; }
+                field("External Document No."; Rec."External Document No.") { ApplicationArea = All; ToolTip = 'Specifies the document number from the external source system.'; }
+                field("Vendor No."; Rec."Vendor No.") { ApplicationArea = All; ToolTip = 'Specifies the vendor for the purchase order.'; }
+                field("Order Date"; Rec."Order Date") { ApplicationArea = All; ToolTip = 'Specifies the order date for the purchase order.'; }
+                field(Status; Rec.Status) { ApplicationArea = All; ToolTip = 'Specifies the processing status of the purchase import.'; }
+                field("Purchase Order No."; Rec."Purchase Order No.") { ApplicationArea = All; ToolTip = 'Specifies the created purchase order number.'; }
+                field("Received At"; Rec."Received At") { ApplicationArea = All; ToolTip = 'Specifies when the purchase import was received.'; }
+                field("Error Message"; Rec."Error Message") { ApplicationArea = All; ToolTip = 'Specifies the error message recorded during processing.'; }
+                field("Webhook Status"; Rec."Webhook Status") { ApplicationArea = All; ToolTip = 'Specifies the status of the purchase status webhook.'; }
+                field("Webhook Error Message"; Rec."Webhook Error Message") { ApplicationArea = All; ToolTip = 'Specifies the error message from the purchase status webhook.'; }
             }
         }
     }
@@ -40,8 +40,8 @@ page 50127 "Jops PO Import Header List"
 
                 trigger OnAction()
                 var
-                    ImportProcessor: Codeunit "Jops PO Import Processor";
-                    ImportHeader: Record "Jops PO Import Header";
+                    ImportProcessor: Codeunit "PO Import Processor";
+                    ImportHeader: Record "PO Import Header";
                 begin
                     CurrPage.SetSelectionFilter(ImportHeader);
                     ImportProcessor.ProcessSelected(ImportHeader);
@@ -58,7 +58,7 @@ page 50127 "Jops PO Import Header List"
                 trigger OnAction()
                 var
                 begin
-                    Report.RunModal(Report::"Jops PO Archive Report");
+                    Report.RunModal(Report::"PO Archive Report");
                     CurrPage.Update(false);
                 end;
             }

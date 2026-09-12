@@ -1,6 +1,6 @@
 namespace Jops.Trial;
 
-table 50116 "Jops PO Import Line"
+table 50116 "PO Import Line"
 {
     Caption = 'Purchase Order Import Line';
 
@@ -9,7 +9,7 @@ table 50116 "Jops PO Import Line"
         field(1; "Entry No."; Integer) { AutoIncrement = true; }
         field(2; "Header Entry No."; Integer)
         {
-            TableRelation = "Jops PO Import Header"."Entry No.";
+            TableRelation = "PO Import Header"."Entry No.";
         }
         field(3; "Line No."; Integer) { }
         field(4; "External Line No."; Code[50]) { }

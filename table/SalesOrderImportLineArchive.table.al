@@ -1,6 +1,6 @@
 namespace Jops.Trial;
 
-table 50109 "Jops SO Import Line Archive"
+table 50109 "SO Import Line Archive"
 {
     Caption = 'Sales Order Import Line Archive';
 
@@ -9,7 +9,7 @@ table 50109 "Jops SO Import Line Archive"
         field(1; "Entry No."; Integer) { }
         field(2; "Header Entry No."; Integer)
         {
-            TableRelation = "Jops SO Import Header Archive"."Entry No.";
+            TableRelation = "SO Import Header Archive"."Entry No.";
         }
         field(3; "Line No."; Integer) { }
         field(4; "External Line No."; Code[50]) { }

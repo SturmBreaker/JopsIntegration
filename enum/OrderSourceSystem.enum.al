@@ -1,6 +1,6 @@
 namespace Jops.Trial;
 
-enum 50112 "Jops Order Source System"
+enum 50112 "Order Source System"
 {
     Extensible = true;
 

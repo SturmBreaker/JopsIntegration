@@ -1,6 +1,6 @@
 namespace Jops.Trial;
 
-table 50115 "Jops PO Import Header"
+table 50115 "PO Import Header"
 {
     Caption = 'Purchase Order Import Header';
 

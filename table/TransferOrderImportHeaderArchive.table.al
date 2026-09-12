@@ -1,6 +1,6 @@
 namespace Jops.Trial;
 
-table 50138 "Jops TO Import Header Archive"
+table 50138 "TO Import Header Archive"
 {
     Caption = 'Transfer Order Import Header Archive';
 

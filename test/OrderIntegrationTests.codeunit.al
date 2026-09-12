@@ -1,6 +1,6 @@
 namespace Jops.Trial;
 
-codeunit 50148 "Jops Order Integration Tests"
+codeunit 50148 "Order Integration Tests"
 {
     Subtype = Test;
     TestPermissions = Disabled;
@@ -8,8 +8,8 @@ codeunit 50148 "Jops Order Integration Tests"
     [Test]
     procedure SalesImportWithoutLinesSetsError()
     var
-        ImportHeader: Record "Jops SO Import Header";
-        Processor: Codeunit "Jops SO Import Processor";
+        ImportHeader: Record "SO Import Header";
+        Processor: Codeunit "SO Import Processor";
     begin
         ImportHeader.Init();
         ImportHeader."Customer No." := 'TEST-CUSTOMER';
@@ -26,8 +26,8 @@ codeunit 50148 "Jops Order Integration Tests"
     [Test]
     procedure PurchaseImportWithoutLinesSetsError()
     var
-        ImportHeader: Record "Jops PO Import Header";
-        Processor: Codeunit "Jops PO Import Processor";
+        ImportHeader: Record "PO Import Header";
+        Processor: Codeunit "PO Import Processor";
     begin
         ImportHeader.Init();
         ImportHeader."Vendor No." := 'TEST-VENDOR';
@@ -44,8 +44,8 @@ codeunit 50148 "Jops Order Integration Tests"
     [Test]
     procedure TransferImportWithoutLinesSetsError()
     var
-        ImportHeader: Record "Jops TO Import Header";
-        Processor: Codeunit "Jops TO Import Processor";
+        ImportHeader: Record "TO Import Header";
+        Processor: Codeunit "TO Import Processor";
     begin
         ImportHeader.Init();
         ImportHeader."Transfer-from Code" := 'FROM';
@@ -63,11 +63,11 @@ codeunit 50148 "Jops Order Integration Tests"
     [Test]
     procedure TransferArchiveMovesProcessedHeaderAndLines()
     var
-        ImportHeader: Record "Jops TO Import Header";
-        ImportLine: Record "Jops TO Import Line";
-        ArchiveHeader: Record "Jops TO Import Header Archive";
-        ArchiveLine: Record "Jops TO Import Line Archive";
-        Archive: Codeunit "Jops TO Import Archive";
+        ImportHeader: Record "TO Import Header";
+        ImportLine: Record "TO Import Line";
+        ArchiveHeader: Record "TO Import Header Archive";
+        ArchiveLine: Record "TO Import Line Archive";
+        Archive: Codeunit "TO Import Archive";
         EntryNo: Integer;
     begin
         ImportHeader.Init();

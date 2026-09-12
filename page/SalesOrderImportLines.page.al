@@ -1,9 +1,9 @@
 namespace Jops.Trial;
 
-page 50102 "Jops SO Import Lines"
+page 50102 "SO Import Lines"
 {
     PageType = API;
-    SourceTable = "Jops SO Import Line";
+    SourceTable = "SO Import Line";
     APIPublisher = 'jops';
     APIGroup = 'staging';
     APIVersion = 'v1.0';
@@ -16,15 +16,15 @@ page 50102 "Jops SO Import Lines"
     {
         area(content)
         {
-            field(id; Rec.SystemId) { }
-            field(entryNo; Rec."Entry No.") { }
-            field(headerEntryNo; Rec."Header Entry No.") { }
-            field(lineNo; Rec."Line No.") { }
-            field(externalLineNo; Rec."External Line No.") { }
-            field(itemNo; Rec."Item No.") { }
-            field(description; Rec.Description) { }
-            field(quantity; Rec.Quantity) { }
-            field(unitPrice; Rec."Unit Price") { }
+            field(id; Rec.SystemId) { ToolTip = 'Specifies the unique identifier of the sales import line.'; }
+            field(entryNo; Rec."Entry No.") { ToolTip = 'Specifies the entry number of the sales import line.'; }
+            field(headerEntryNo; Rec."Header Entry No.") { ToolTip = 'Specifies the entry number of the related sales import header.'; }
+            field(lineNo; Rec."Line No.") { ToolTip = 'Specifies the line number of the sales import line.'; }
+            field(externalLineNo; Rec."External Line No.") { ToolTip = 'Specifies the line number from the external source system.'; }
+            field(itemNo; Rec."Item No.") { ToolTip = 'Specifies the item to add to the sales order.'; }
+            field(description; Rec.Description) { ToolTip = 'Specifies the description of the sales import line.'; }
+            field(quantity; Rec.Quantity) { ToolTip = 'Specifies the quantity to add to the sales order.'; }
+            field(unitPrice; Rec."Unit Price") { ToolTip = 'Specifies the unit price for the sales order line.'; }
         }
     }
 }

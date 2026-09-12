@@ -1,6 +1,6 @@
 namespace Jops.Trial;
 
-table 50108 "Jops SO Import Header Archive"
+table 50108 "SO Import Header Archive"
 {
     Caption = 'Sales Order Import Header Archive';
 

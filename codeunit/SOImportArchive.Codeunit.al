@@ -1,8 +1,8 @@
 namespace Jops.Trial;
 
-codeunit 50110 "Jops SO Import Archive"
+codeunit 50110 "SO Import Archive"
 {
-    TableNo = "Jops SO Import Header";
+    TableNo = "SO Import Header";
 
     trigger OnRun()
     begin
@@ -11,7 +11,7 @@ codeunit 50110 "Jops SO Import Archive"
 
     procedure ArchiveFiltered(FromDate: Date; ToDate: Date; SalesOrderNo: Code[20]; ItemNo: Code[20])
     var
-        ImportHeader: Record "Jops SO Import Header";
+        ImportHeader: Record "SO Import Header";
     begin
         ImportHeader.SetFilter(Status, '<>%1', ImportHeader.Status::Pending);
         if (FromDate <> 0D) and (ToDate <> 0D) then
@@ -34,18 +34,18 @@ codeunit 50110 "Jops SO Import Archive"
 
     local procedure HasItem(HeaderEntryNo: Integer; ItemNo: Code[20]): Boolean
     var
-        ImportLine: Record "Jops SO Import Line";
+        ImportLine: Record "SO Import Line";
     begin
         ImportLine.SetRange("Header Entry No.", HeaderEntryNo);
         ImportLine.SetRange("Item No.", ItemNo);
         exit(not ImportLine.IsEmpty());
     end;
 
-    local procedure ArchiveHeader(var ImportHeader: Record "Jops SO Import Header")
+    local procedure ArchiveHeader(var ImportHeader: Record "SO Import Header")
     var
-        ArchiveHeaderRecord: Record "Jops SO Import Header Archive";
-        ImportLine: Record "Jops SO Import Line";
-        ArchiveLine: Record "Jops SO Import Line Archive";
+        ArchiveHeaderRecord: Record "SO Import Header Archive";
+        ImportLine: Record "SO Import Line";
+        ArchiveLine: Record "SO Import Line Archive";
     begin
         ArchiveHeaderRecord.Init();
         ArchiveHeaderRecord."Entry No." := ImportHeader."Entry No.";

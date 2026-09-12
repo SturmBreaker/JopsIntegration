@@ -2,9 +2,9 @@ namespace Jops.Trial;
 
 using Microsoft.Inventory.Transfer;
 
-codeunit 50136 "Jops TO Import Worker"
+codeunit 50136 "TO Import Worker"
 {
-    TableNo = "Jops TO Import Header";
+    TableNo = "TO Import Header";
 
     trigger OnRun()
     begin
@@ -12,18 +12,18 @@ codeunit 50136 "Jops TO Import Worker"
         CreateTransferOrder(Rec);
     end;
 
-    local procedure CreateTransferOrder(var ImportHeader: Record "Jops TO Import Header")
+    local procedure CreateTransferOrder(var ImportHeader: Record "TO Import Header")
     var
         TransferHeader: Record "Transfer Header";
         TransferLine: Record "Transfer Line";
-        ImportLine: Record "Jops TO Import Line";
+        ImportLine: Record "TO Import Line";
         NextLineNo: Integer;
     begin
         TransferHeader.Init();
         TransferHeader.Insert(true);
         TransferHeader.Validate("Transfer-from Code", ImportHeader."Transfer-from Code");
         TransferHeader.Validate("Transfer-to Code", ImportHeader."Transfer-to Code");
-        TransferHeader.Validate("Source System", Enum::"Jops Order Source System"::System1);
+        TransferHeader.Validate("Source System", Enum::"Order Source System"::System1);
         if ImportHeader."Order Date" <> 0D then
             TransferHeader.Validate("Posting Date", ImportHeader."Order Date");
         TransferHeader.Validate("External Document No.", ImportHeader."External Document No.");

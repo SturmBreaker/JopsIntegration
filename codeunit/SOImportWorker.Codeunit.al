@@ -2,9 +2,9 @@ namespace Jops.Trial;
 
 using Microsoft.Sales.Document;
 
-codeunit 50106 "Jops SO Import Worker"
+codeunit 50106 "SO Import Worker"
 {
-    TableNo = "Jops SO Import Header";
+    TableNo = "SO Import Header";
 
     trigger OnRun()
     begin
@@ -12,18 +12,18 @@ codeunit 50106 "Jops SO Import Worker"
         CreateSalesOrder(Rec);
     end;
 
-    local procedure CreateSalesOrder(var ImportHeader: Record "Jops SO Import Header")
+    local procedure CreateSalesOrder(var ImportHeader: Record "SO Import Header")
     var
         SalesHeader: Record "Sales Header";
         SalesLine: Record "Sales Line";
-        ImportLine: Record "Jops SO Import Line";
+        ImportLine: Record "SO Import Line";
         NextLineNo: Integer;
     begin
         SalesHeader.Init();
         SalesHeader."Document Type" := SalesHeader."Document Type"::Order;
         SalesHeader.Insert(true);
         SalesHeader.Validate("Sell-to Customer No.", ImportHeader."Customer No.");
-        SalesHeader.Validate("Source System", Enum::"Jops Order Source System"::System1);
+        SalesHeader.Validate("Source System", Enum::"Order Source System"::System1);
         if ImportHeader."Order Date" <> 0D then
             SalesHeader.Validate("Posting Date", ImportHeader."Order Date");
         if ImportHeader."Currency Code" <> '' then

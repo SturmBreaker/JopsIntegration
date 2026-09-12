@@ -1,6 +1,6 @@
 namespace Jops.Trial;
 
-report 50130 "Jops SO Archive Report"
+report 50130 "SO Archive Report"
 {
     Caption = 'Archive Sales Order Staging';
     ProcessingOnly = true;
@@ -9,7 +9,7 @@ report 50130 "Jops SO Archive Report"
 
     dataset
     {
-        dataitem(ImportHeader; "Jops SO Import Header")
+        dataitem(ImportHeader; "SO Import Header")
         {
             trigger OnPreDataItem()
             begin
@@ -50,7 +50,7 @@ report 50130 "Jops SO Archive Report"
 
     trigger OnPreReport()
     var
-        ArchiveCodeunit: Codeunit "Jops SO Import Archive";
+        ArchiveCodeunit: Codeunit "SO Import Archive";
     begin
         ArchiveCodeunit.ArchiveFiltered(FromDate, ToDate, SalesOrderNo, ItemNo);
     end;

@@ -2,9 +2,9 @@ namespace Jops.Trial;
 
 using Microsoft.Purchases.Document;
 
-codeunit 50119 "Jops PO Import Worker"
+codeunit 50119 "PO Import Worker"
 {
-    TableNo = "Jops PO Import Header";
+    TableNo = "PO Import Header";
 
     trigger OnRun()
     begin
@@ -12,18 +12,18 @@ codeunit 50119 "Jops PO Import Worker"
         CreatePurchaseOrder(Rec);
     end;
 
-    local procedure CreatePurchaseOrder(var ImportHeader: Record "Jops PO Import Header")
+    local procedure CreatePurchaseOrder(var ImportHeader: Record "PO Import Header")
     var
         PurchaseHeader: Record "Purchase Header";
         PurchaseLine: Record "Purchase Line";
-        ImportLine: Record "Jops PO Import Line";
+        ImportLine: Record "PO Import Line";
         NextLineNo: Integer;
     begin
         PurchaseHeader.Init();
         PurchaseHeader."Document Type" := PurchaseHeader."Document Type"::Order;
         PurchaseHeader.Insert(true);
         PurchaseHeader.Validate("Buy-from Vendor No.", ImportHeader."Vendor No.");
-        PurchaseHeader.Validate("Source System", Enum::"Jops Order Source System"::System1);
+        PurchaseHeader.Validate("Source System", Enum::"Order Source System"::System1);
         if ImportHeader."Order Date" <> 0D then
             PurchaseHeader.Validate("Posting Date", ImportHeader."Order Date");
         if ImportHeader."Currency Code" <> '' then
