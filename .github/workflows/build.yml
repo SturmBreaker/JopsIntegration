@@ -67,7 +67,7 @@ jobs:
 
       - name: Upload Apps artifact
         if: success() || failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ steps.calculateArtifactsNames.outputs.AppsArtifactsName }}
           path: './.buildartifacts/Apps/'
@@ -75,7 +75,7 @@ jobs:
 
       - name: Upload Dependencies artifact
         if: success() || failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ steps.calculateArtifactsNames.outputs.DependenciesArtifactsName }}
           path: './.buildartifacts/Dependencies/'
@@ -83,7 +83,7 @@ jobs:
 
       - name: Upload TestApps artifact
         if: success() || failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ steps.calculateArtifactsNames.outputs.TestAppsArtifactsName }}
           path: './.buildartifacts/TestApps/'
