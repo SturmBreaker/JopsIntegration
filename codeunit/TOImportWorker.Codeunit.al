@@ -53,12 +53,8 @@ codeunit 50136 "TO Import Worker"
             NextLineNo += 10000;
         until ImportLine.Next() = 0;
 
-        if not Codeunit.Run(Codeunit::"TransferOrder-Post Shipment", TransferHeader) then
-            Error('Transfer order %1 shipment could not be posted. %2', TransferHeader."No.", GetLastErrorText());
-
-        TransferHeader.Get(TransferHeader."No.");
-        if not Codeunit.Run(Codeunit::"TransferOrder-Post Receipt", TransferHeader) then
-            Error('Transfer order %1 receipt could not be posted. %2', TransferHeader."No.", GetLastErrorText());
+        if not Codeunit.Run(Codeunit::"TransferOrder-Post Transfer", TransferHeader) then
+            Error('Transfer order %1 could not be posted through receipt. %2', TransferHeader."No.", GetLastErrorText());
 
         ImportHeader."Transfer Order No." := TransferHeader."No.";
         ImportHeader.Modify(true);
