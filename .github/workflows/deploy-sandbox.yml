@@ -1,0 +1,125 @@
+name: Deploy AL Extension to Sandbox
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: Branch whose latest successful build artifact should be deployed
+        required: true
+        default: main
+      environmentName:
+        description: Business Central sandbox environment name
+        required: true
+        default: DEVJOPS_PH
+
+permissions:
+  contents: read
+  actions: read
+  packages: read
+
+jobs:
+  deploy:
+    name: Deploy latest branch artifact
+    runs-on: windows-latest
+    environment: ${{ inputs.environmentName }}
+
+    steps:
+      - name: Checkout selected branch
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.branch }}
+
+      - name: Read AL-Go settings
+        id: settings
+        uses: microsoft/AL-Go-Actions/ReadSettings@v9.2
+        with:
+          shell: powershell
+          project: .
+
+      - name: Read deployment secrets
+        id: secrets
+        uses: microsoft/AL-Go-Actions/ReadSecrets@v9.2
+        with:
+          shell: powershell
+          gitHubSecrets: ${{ toJson(secrets) }}
+          getSecrets: '${{ inputs.environmentName }}-AuthContext,${{ inputs.environmentName }}_AuthContext,AuthContext'
+
+      - name: Download latest successful Apps artifact
+        id: artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ inputs.branch }}
+          REPOSITORY: ${{ github.repository }}
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $headers = @{ Authorization = "Bearer $env:GH_TOKEN"; Accept = 'application/vnd.github+json' }
+          $runsUri = "https://api.github.com/repos/$env:REPOSITORY/actions/workflows/build.yml/runs?branch=$([uri]::EscapeDataString($env:BRANCH))&status=success&per_page=20"
+          $runs = (Invoke-RestMethod -Headers $headers -Uri $runsUri).workflow_runs
+          $run = $runs | Where-Object { $_.conclusion -eq 'success' } | Select-Object -First 1
+          if (-not $run) {
+            throw "No successful build.yml run was found for branch '$env:BRANCH'."
+          }
+
+          $artifactsUri = "https://api.github.com/repos/$env:REPOSITORY/actions/runs/$($run.id)/artifacts?per_page=100"
+          $artifacts = (Invoke-RestMethod -Headers $headers -Uri $artifactsUri).artifacts
+          $appsArtifact = $artifacts | Where-Object { -not $_.expired -and $_.name -match '(^|-)Apps(-|$)' } | Select-Object -First 1
+          if (-not $appsArtifact) {
+            throw "No non-expired Apps artifact was found for successful run $($run.id) on branch '$env:BRANCH'."
+          }
+
+          $artifactRoot = Join-Path $env:GITHUB_WORKSPACE '.artifacts'
+          $zipPath = Join-Path $env:RUNNER_TEMP 'apps-artifact.zip'
+          New-Item -ItemType Directory -Path $artifactRoot -Force | Out-Null
+          Invoke-WebRequest -Headers $headers -Uri $appsArtifact.archive_download_url -OutFile $zipPath
+          Expand-Archive -Path $zipPath -DestinationPath (Join-Path $artifactRoot 'Apps') -Force
+          Add-Content -Path $env:GITHUB_OUTPUT -Value "runId=$($run.id)"
+          Add-Content -Path $env:GITHUB_OUTPUT -Value "artifactName=$($appsArtifact.name)"
+          Write-Host "Downloaded $($appsArtifact.name) from run $($run.id) ($($run.head_sha))."
+
+      - name: Set deployment environment configuration
+        id: deployment
+        env:
+          ENVIRONMENT_NAME: ${{ inputs.environmentName }}
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $configuration = @{}
+          $configuration[$env:ENVIRONMENT_NAME] = @{
+            EnvironmentName = $env:ENVIRONMENT_NAME
+            EnvironmentType = 'Sandbox'
+            Scope = 'Dev'
+            SyncMode = 'ForceSync'
+            DependencyInstallMode = 'default'
+            continuousDeployment = $true
+          }
+          $configuration = $configuration | ConvertTo-Json -Depth 5 -Compress
+          Add-Content -Path $env:GITHUB_OUTPUT -Value 'json<<DEPLOYMENT_JSON'
+          Add-Content -Path $env:GITHUB_OUTPUT -Value $configuration
+          Add-Content -Path $env:GITHUB_OUTPUT -Value 'DEPLOYMENT_JSON'
+
+      - name: Deploy to Business Central sandbox
+        id: deploy
+        uses: microsoft/AL-Go-Actions/Deploy@v9.2
+        env:
+          Secrets: ${{ steps.secrets.outputs.Secrets }}
+        with:
+          shell: powershell
+          environmentName: ${{ inputs.environmentName }}
+          artifactsFolder: .artifacts
+          type: Publish
+          deploymentEnvironmentsJson: ${{ steps.deployment.outputs.json }}
+
+      - name: Deployment summary
+        env:
+          ENVIRONMENT_URL: ${{ steps.deploy.outputs.environmentUrl }}
+          ARTIFACT_NAME: ${{ steps.artifact.outputs.artifactName }}
+          RUN_ID: ${{ steps.artifact.outputs.runId }}
+          BRANCH: ${{ inputs.branch }}
+        shell: powershell
+        run: |
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "### Sandbox deployment"
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "- Branch: ``$env:BRANCH``"
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "- Build run: [$env:RUN_ID]($env:GITHUB_SERVER_URL/$env:GITHUB_REPOSITORY/actions/runs/$env:RUN_ID)"
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "- Artifact: ``$env:ARTIFACT_NAME``"
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "- Environment: $env:ENVIRONMENT_URL"
