@@ -114,11 +114,20 @@ jobs:
           $configuration[$env:ENVIRONMENT_NAME] = @{
             EnvironmentName = $env:ENVIRONMENT_NAME
             EnvironmentType = 'Sandbox'
+            Branches = @()
+            BranchesFromPolicy = @()
             Scope = 'Dev'
             SyncMode = 'ForceSync'
-            DependencyInstallMode = 'default'
+            DependencyInstallMode = 'install'
+            buildMode = $null
             continuousDeployment = $true
             Projects = '*'
+            'runs-on' = 'windows-latest'
+            shell = 'powershell'
+            companyId = ''
+            ppEnvironmentUrl = ''
+            includeTestAppsInSandboxEnvironment = $false
+            excludeAppIds = @()
           }
           $configuration = $configuration | ConvertTo-Json -Depth 5 -Compress
           Add-Content -Path $env:GITHUB_OUTPUT -Value 'json<<DEPLOYMENT_JSON'
