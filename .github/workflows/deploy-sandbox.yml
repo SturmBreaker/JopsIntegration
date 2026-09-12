@@ -16,6 +16,7 @@ permissions:
   contents: read
   actions: read
   packages: read
+  id-token: write
 
 jobs:
   deploy:
@@ -43,6 +44,40 @@ jobs:
           shell: powershell
           gitHubSecrets: ${{ toJson(secrets) }}
           getSecrets: '${{ inputs.environmentName }}-AuthContext,${{ inputs.environmentName }}_AuthContext,AuthContext'
+
+      - name: Authenticate with device code when no AuthContext is configured
+        id: authenticate
+        env:
+          SECRETS: ${{ steps.secrets.outputs.Secrets }}
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $secrets = $env:SECRETS | ConvertFrom-Json
+          $authContext = @(
+            $secrets.'${{ inputs.environmentName }}-AuthContext'
+            $secrets.'${{ inputs.environmentName }}_AuthContext'
+            $secrets.AuthContext
+          ) | Where-Object { $_ }
+
+          if ($authContext) {
+            Write-Host 'Using the configured AuthContext secret.'
+            Add-Content -Path $env:GITHUB_OUTPUT -Value 'deviceCode='
+            exit 0
+          }
+
+          Write-Host 'No AuthContext secret was found. Starting device-code authentication.'
+          $helperPath = Join-Path $env:RUNNER_TEMP 'AL-Go-Helper.ps1'
+          Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/microsoft/AL-Go-Actions/v9.2/AL-Go-Helper.ps1' -OutFile $helperPath
+          . $helperPath
+          DownloadAndImportBcContainerHelper
+          $auth = New-BcAuthContext -includeDeviceLogin -deviceLoginTimeout ([TimeSpan]::FromSeconds(0))
+          if (-not $auth.deviceCode) {
+            throw 'Could not start Business Central device-code authentication.'
+          }
+
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value '### Authentication required'
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value $auth.message
+          Add-Content -Path $env:GITHUB_OUTPUT -Value "deviceCode=$($auth.deviceCode)"
 
       - name: Download latest successful Apps artifact
         id: artifact
@@ -103,6 +138,7 @@ jobs:
         uses: microsoft/AL-Go-Actions/Deploy@v9.2
         env:
           Secrets: ${{ steps.secrets.outputs.Secrets }}
+          deviceCode: ${{ steps.authenticate.outputs.deviceCode }}
         with:
           shell: powershell
           environmentName: ${{ inputs.environmentName }}
