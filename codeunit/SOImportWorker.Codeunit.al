@@ -1,6 +1,7 @@
 namespace Jops.Trial;
 
 using Microsoft.Sales.Document;
+using Microsoft.Sales.History;
 using Microsoft.Sales.Posting;
 
 codeunit 50106 "SO Import Worker"
@@ -18,6 +19,9 @@ codeunit 50106 "SO Import Worker"
         SalesHeader: Record "Sales Header";
         SalesLine: Record "Sales Line";
         ImportLine: Record "SO Import Line";
+        SalesShipmentHeader: Record "Sales Shipment Header";
+        SalesInvoiceHeader: Record "Sales Invoice Header";
+        SalesOrderNo: Code[20];
         NextLineNo: Integer;
     begin
         SalesHeader.Init();
@@ -59,13 +63,23 @@ codeunit 50106 "SO Import Worker"
             NextLineNo += 10000;
         until ImportLine.Next() = 0;
 
+        SalesOrderNo := SalesHeader."No.";
         SalesHeader.Validate(Ship, true);
         SalesHeader.Validate(Invoice, true);
         SalesHeader.Modify(true);
         if not Codeunit.Run(Codeunit::"Sales-Post", SalesHeader) then
             Error('Sales order %1 could not be posted. %2', SalesHeader."No.", GetLastErrorText());
 
-        ImportHeader."Sales Order No." := SalesHeader."No.";
+        SalesShipmentHeader.SetRange("Order No.", SalesOrderNo);
+        if not SalesShipmentHeader.FindFirst() then
+            Error('Posted shipment for sales order %1 could not be found.', SalesOrderNo);
+        SalesInvoiceHeader.SetRange("Order No.", SalesOrderNo);
+        if not SalesInvoiceHeader.FindFirst() then
+            Error('Posted invoice for sales order %1 could not be found.', SalesOrderNo);
+
+        ImportHeader."Sales Order No." := SalesOrderNo;
+        ImportHeader."Shipment No." := SalesShipmentHeader."No.";
+        ImportHeader."Invoice No." := SalesInvoiceHeader."No.";
         ImportHeader.Modify(true);
     end;
 }

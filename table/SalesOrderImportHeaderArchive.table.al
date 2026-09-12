@@ -1,5 +1,7 @@
 namespace Jops.Trial;
 
+using Microsoft.Sales.History;
+
 table 50108 "SO Import Header Archive"
 {
     Caption = 'Sales Order Import Header Archive';
@@ -24,6 +26,16 @@ table 50108 "SO Import Header Archive"
         }
         field(11; "Webhook Error Message"; Text[250]) { }
         field(12; "Archived At"; DateTime) { }
+        field(13; "Shipment No."; Code[20])
+        {
+            TableRelation = "Sales Shipment Header"."No.";
+            ValidateTableRelation = false;
+        }
+        field(14; "Invoice No."; Code[20])
+        {
+            TableRelation = "Sales Invoice Header"."No.";
+            ValidateTableRelation = false;
+        }
     }
 
     keys

@@ -25,6 +25,8 @@ page 50101 "SO Import Headers"
             field(status; Rec.Status) { ToolTip = 'Specifies the processing status of the sales import.'; }
             field(errorMessage; Rec."Error Message") { ToolTip = 'Specifies the error message recorded during processing.'; }
             field(salesOrderNo; Rec."Sales Order No.") { ToolTip = 'Specifies the created sales order number.'; }
+            field(shipmentNo; Rec."Shipment No.") { ToolTip = 'Specifies the posted sales shipment number.'; }
+            field(invoiceNo; Rec."Invoice No.") { ToolTip = 'Specifies the posted sales invoice number.'; }
             field(webhookStatus; Rec."Webhook Status") { ToolTip = 'Specifies the status of the sales status webhook.'; }
             field(webhookErrorMessage; Rec."Webhook Error Message") { ToolTip = 'Specifies the error message from the sales status webhook.'; }
             field(receivedAt; Rec."Received At") { ToolTip = 'Specifies when the sales import was received.'; }

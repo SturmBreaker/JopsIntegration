@@ -1,5 +1,7 @@
 namespace Jops.Trial;
 
+using Microsoft.Sales.History;
+
 table 50101 "SO Import Header"
 {
     Caption = 'Sales Order Import Header';
@@ -26,6 +28,16 @@ table 50101 "SO Import Header"
             OptionMembers = Pending,Sent,Error;
         }
         field(11; "Webhook Error Message"; Text[250]) { }
+        field(12; "Shipment No."; Code[20])
+        {
+            TableRelation = "Sales Shipment Header"."No.";
+            ValidateTableRelation = false;
+        }
+        field(13; "Invoice No."; Code[20])
+        {
+            TableRelation = "Sales Invoice Header"."No.";
+            ValidateTableRelation = false;
+        }
     }
 
     keys
