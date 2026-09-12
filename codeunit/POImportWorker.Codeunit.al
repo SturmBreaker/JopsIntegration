@@ -1,6 +1,7 @@
 namespace Jops.Trial;
 
 using Microsoft.Purchases.Document;
+using Microsoft.Purchases.Posting;
 
 codeunit 50119 "PO Import Worker"
 {
@@ -57,6 +58,12 @@ codeunit 50119 "PO Import Worker"
             PurchaseLine.Modify(true);
             NextLineNo += 10000;
         until ImportLine.Next() = 0;
+
+        PurchaseHeader.Validate(Receive, true);
+        PurchaseHeader.Validate(Invoice, true);
+        PurchaseHeader.Modify(true);
+        if not Codeunit.Run(Codeunit::"Purch.-Post", PurchaseHeader) then
+            Error('Purchase order %1 could not be posted. %2', PurchaseHeader."No.", GetLastErrorText());
 
         ImportHeader."Purchase Order No." := PurchaseHeader."No.";
         ImportHeader.Modify(true);

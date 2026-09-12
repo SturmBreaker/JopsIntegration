@@ -1,6 +1,7 @@
 namespace Jops.Trial;
 
 using Microsoft.Sales.Document;
+using Microsoft.Sales.Posting;
 
 codeunit 50106 "SO Import Worker"
 {
@@ -57,6 +58,12 @@ codeunit 50106 "SO Import Worker"
             SalesLine.Modify(true);
             NextLineNo += 10000;
         until ImportLine.Next() = 0;
+
+        SalesHeader.Validate(Ship, true);
+        SalesHeader.Validate(Invoice, true);
+        SalesHeader.Modify(true);
+        if not Codeunit.Run(Codeunit::"Sales-Post", SalesHeader) then
+            Error('Sales order %1 could not be posted. %2', SalesHeader."No.", GetLastErrorText());
 
         ImportHeader."Sales Order No." := SalesHeader."No.";
         ImportHeader.Modify(true);
