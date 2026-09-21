@@ -32,9 +32,22 @@ page 50141 "TO Import Headers"
     }
 
     trigger OnInsertRecord(BelowxRec: Boolean): Boolean
+    var
+        CustomDimensions: Dictionary of [Text, Text];
+        Payload: JsonObject;
+        PayloadText: Text;
+        SetupManagement: Codeunit "Order Integration Setup Mgt.";
     begin
         Rec.Status := Rec.Status::Pending;
         Rec."Received At" := CurrentDateTime();
+        if SetupManagement.IsApiTelemetryEnabled() then begin
+            Payload.Add('transferOrderNo', Rec."Transfer Order No.");
+            Payload.WriteTo(PayloadText);
+            CustomDimensions.Add('Integration', 'Transfer Order Import');
+            CustomDimensions.Add('Source', 'API');
+            CustomDimensions.Add('Payload', PayloadText);
+            Session.LogMessage('JOPS-TO-API', 'Transfer order integration request received.', Verbosity::Normal, DataClassification::SystemMetadata, TelemetryScope::ExtensionPublisher, CustomDimensions);
+        end;
         exit(true);
     end;
 }

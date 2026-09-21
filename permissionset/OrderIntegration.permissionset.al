@@ -4,6 +4,7 @@ permissionset 50147 "Order Integr."
     Caption = 'Jops Order Integration';
 
     Permissions =
+        tabledata "Order Integration Setup" = RIMD,
         tabledata "SO Import Header" = RIMD,
         tabledata "SO Import Line" = RIMD,
         tabledata "SO Import Header Archive" = RIMD,
@@ -34,6 +35,7 @@ permissionset 50147 "Order Integr."
         codeunit "TO Import Worker" = X,
         codeunit "TO Import Webhook" = X,
         codeunit "TO Import Archive" = X,
+        codeunit "Order Integration Setup Mgt." = X,
         page "SO Import Headers" = X,
         page "SO Import Lines" = X,
         page "SO Import Header List" = X,
@@ -46,6 +48,7 @@ permissionset 50147 "Order Integr."
         page "TO Import Lines" = X,
         page "TO Import Header List" = X,
         page "TO Import Line List" = X,
+        page "Order Integration Setup" = X,
         report "SO Archive Report" = X,
         report "PO Archive Report" = X,
         report "TO Archive Report" = X;
