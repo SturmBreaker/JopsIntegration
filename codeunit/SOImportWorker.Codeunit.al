@@ -1,9 +1,3 @@
-namespace Jops.Trial;
-
-using Microsoft.Sales.Document;
-using Microsoft.Sales.History;
-using Microsoft.Sales.Posting;
-
 codeunit 50106 "SO Import Worker"
 {
     TableNo = "SO Import Header";

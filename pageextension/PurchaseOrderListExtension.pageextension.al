@@ -1,7 +1,3 @@
-namespace Jops.Trial;
-
-using Microsoft.Purchases.Document;
-
 pageextension 50129 "PO List Extension" extends "Purchase Order List"
 {
     layout

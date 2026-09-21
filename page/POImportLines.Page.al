@@ -1,5 +1,3 @@
-namespace Jops.Trial;
-
 page 50125 "PO Import Lines"
 {
     PageType = API;

@@ -1,5 +1,3 @@
-namespace Jops.Trial;
-
 table 50102 "SO Import Line"
 {
     Caption = 'Sales Order Import Line';

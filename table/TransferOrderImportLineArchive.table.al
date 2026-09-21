@@ -1,5 +1,3 @@
-namespace Jops.Trial;
-
 table 50139 "TO Import Line Archive"
 {
     Caption = 'Transfer Order Import Line Archive';

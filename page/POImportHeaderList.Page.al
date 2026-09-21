@@ -1,8 +1,3 @@
-namespace Jops.Trial;
-
-using Microsoft.Purchases.Document;
-using Microsoft.Purchases.History;
-
 page 50127 "PO Import Header List"
 {
     PageType = List;

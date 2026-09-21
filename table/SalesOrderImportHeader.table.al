@@ -1,7 +1,3 @@
-namespace Jops.Trial;
-
-using Microsoft.Sales.History;
-
 table 50101 "SO Import Header"
 {
     Caption = 'Sales Order Import Header';

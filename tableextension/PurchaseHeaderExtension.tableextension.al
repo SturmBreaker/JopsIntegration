@@ -1,7 +1,3 @@
-namespace Jops.Trial;
-
-using Microsoft.Purchases.Document;
-
 tableextension 50117 "Purchase Header Ext" extends "Purchase Header"
 {
     fields

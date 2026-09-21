@@ -1,5 +1,3 @@
-namespace Jops.Trial;
-
 codeunit 50120 "PO Import Webhook"
 {
     TableNo = "PO Import Header";

@@ -1,7 +1,3 @@
-namespace Jops.Trial;
-
-using Microsoft.Inventory.Transfer;
-
 tableextension 50134 "Transfer Header Ext" extends "Transfer Header"
 {
     fields

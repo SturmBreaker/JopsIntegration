@@ -1,5 +1,3 @@
-namespace Jops.Trial;
-
 codeunit 50123 "PO Import Archive"
 {
     TableNo = "PO Import Header";

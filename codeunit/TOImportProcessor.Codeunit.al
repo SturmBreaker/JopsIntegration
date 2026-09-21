@@ -1,5 +1,3 @@
-namespace Jops.Trial;
-
 codeunit 50135 "TO Import Processor"
 {
     TableNo = "TO Import Header";

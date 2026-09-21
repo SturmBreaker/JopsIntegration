@@ -1,5 +1,3 @@
-namespace Jops.Trial;
-
 page 50104 "SO Import Line List"
 {
     PageType = List;

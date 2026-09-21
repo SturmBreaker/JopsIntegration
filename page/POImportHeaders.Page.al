@@ -1,5 +1,3 @@
-namespace Jops.Trial;
-
 page 50124 "PO Import Headers"
 {
     PageType = API;

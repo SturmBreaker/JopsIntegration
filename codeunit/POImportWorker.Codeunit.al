@@ -1,9 +1,3 @@
-namespace Jops.Trial;
-
-using Microsoft.Purchases.Document;
-using Microsoft.Purchases.History;
-using Microsoft.Purchases.Posting;
-
 codeunit 50119 "PO Import Worker"
 {
     TableNo = "PO Import Header";

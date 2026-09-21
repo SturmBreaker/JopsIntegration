@@ -1,5 +1,3 @@
-namespace Jops.Trial;
-
 report 50131 "PO Archive Report"
 {
     Caption = 'Archive Purchase Order Staging';

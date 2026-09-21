@@ -1,5 +1,3 @@
-namespace Jops.Trial;
-
 report 50145 "TO Archive Report"
 {
     Caption = 'Archive Transfer Order Staging';

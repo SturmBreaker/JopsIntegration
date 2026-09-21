@@ -1,7 +1,3 @@
-namespace Jops.Trial;
-
-using Microsoft.Inventory.Transfer;
-
 page 50143 "TO Import Header List"
 {
     PageType = List;

@@ -1,7 +1,3 @@
-namespace Jops.Trial;
-
-using Microsoft.Inventory.Transfer;
-
 table 50132 "TO Import Header"
 {
     Caption = 'Transfer Order Import Header';

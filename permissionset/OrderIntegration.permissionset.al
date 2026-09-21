@@ -1,9 +1,3 @@
-namespace Jops.Trial;
-
-using Microsoft.Inventory.Transfer;
-using Microsoft.Purchases.Document;
-using Microsoft.Sales.Document;
-
 permissionset 50147 "Order Integr."
 {
     Assignable = true;

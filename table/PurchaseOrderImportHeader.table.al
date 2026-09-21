@@ -1,7 +1,3 @@
-namespace Jops.Trial;
-
-using Microsoft.Purchases.History;
-
 table 50115 "PO Import Header"
 {
     Caption = 'Purchase Order Import Header';

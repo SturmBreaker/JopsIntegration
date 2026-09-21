@@ -1,5 +1,3 @@
-namespace Jops.Trial;
-
 codeunit 50107 "SO Import Webhook"
 {
     TableNo = "SO Import Header";

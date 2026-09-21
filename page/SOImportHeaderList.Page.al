@@ -1,8 +1,3 @@
-namespace Jops.Trial;
-
-using Microsoft.Sales.History;
-using Microsoft.Sales.Document;
-
 page 50103 "SO Import Header List"
 {
     PageType = List;

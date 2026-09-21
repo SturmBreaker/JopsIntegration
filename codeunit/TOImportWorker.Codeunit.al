@@ -1,7 +1,3 @@
-namespace Jops.Trial;
-
-using Microsoft.Inventory.Transfer;
-
 codeunit 50136 "TO Import Worker"
 {
     TableNo = "TO Import Header";

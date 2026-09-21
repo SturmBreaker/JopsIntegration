@@ -1,5 +1,3 @@
-namespace Jops.Trial;
-
 enum 50112 "Order Source System"
 {
     Extensible = true;

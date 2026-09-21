@@ -1,5 +1,3 @@
-namespace Jops.Trial;
-
 codeunit 50110 "SO Import Archive"
 {
     TableNo = "SO Import Header";

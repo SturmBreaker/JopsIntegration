@@ -1,5 +1,3 @@
-namespace Jops.Trial;
-
 report 50130 "SO Archive Report"
 {
     Caption = 'Archive Sales Order Staging';

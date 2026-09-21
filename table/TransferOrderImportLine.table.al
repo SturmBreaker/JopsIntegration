@@ -1,5 +1,3 @@
-namespace Jops.Trial;
-
 table 50133 "TO Import Line"
 {
     Caption = 'Transfer Order Import Line';

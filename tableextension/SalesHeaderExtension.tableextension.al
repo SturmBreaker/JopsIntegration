@@ -1,7 +1,3 @@
-namespace Jops.Trial;
-
-using Microsoft.Sales.Document;
-
 tableextension 50113 "Sales Header Extension" extends "Sales Header"
 {
     fields

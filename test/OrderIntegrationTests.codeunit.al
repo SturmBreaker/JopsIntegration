@@ -1,5 +1,3 @@
-namespace Jops.Trial;
-
 codeunit 50148 "Order Integration Tests"
 {
     Subtype = Test;
