@@ -49,6 +49,7 @@ permissionset 50147 "Order Integr."
         page "TO Import Header List" = X,
         page "TO Import Line List" = X,
         page "Order Integration Setup" = X,
+        page "Order Integration Role Center" = X,
         report "SO Archive Report" = X,
         report "PO Archive Report" = X,
         report "TO Archive Report" = X;
