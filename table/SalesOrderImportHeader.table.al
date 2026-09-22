@@ -7,6 +7,7 @@ table 50101 "SO Import Header"
         field(1; "Entry No."; Integer)
         {
             AutoIncrement = true;
+            Editable = false;
         }
         field(2; "External Document No."; Code[50]) { }
         field(3; "Customer No."; Code[20]) { }

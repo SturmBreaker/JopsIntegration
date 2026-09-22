@@ -4,7 +4,7 @@ table 50133 "TO Import Line"
 
     fields
     {
-        field(1; "Entry No."; Integer) { AutoIncrement = true; }
+        field(1; "Entry No."; Integer) { AutoIncrement = true; Editable = false; }
         field(2; "Header Entry No."; Integer)
         {
             TableRelation = "TO Import Header"."Entry No.";

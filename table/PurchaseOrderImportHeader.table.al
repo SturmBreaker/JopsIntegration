@@ -4,7 +4,7 @@ table 50115 "PO Import Header"
 
     fields
     {
-        field(1; "Entry No."; Integer) { AutoIncrement = true; }
+        field(1; "Entry No."; Integer) { AutoIncrement = true; Editable = false; }
         field(2; "External Document No."; Code[50]) { }
         field(3; "Vendor No."; Code[20]) { }
         field(4; "Order Date"; Date) { }

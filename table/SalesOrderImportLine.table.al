@@ -7,6 +7,7 @@ table 50102 "SO Import Line"
         field(1; "Entry No."; Integer)
         {
             AutoIncrement = true;
+            Editable = false;
         }
         field(2; "Header Entry No."; Integer)
         {

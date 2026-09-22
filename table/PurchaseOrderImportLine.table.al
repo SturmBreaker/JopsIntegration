@@ -4,7 +4,7 @@ table 50116 "PO Import Line"
 
     fields
     {
-        field(1; "Entry No."; Integer) { AutoIncrement = true; }
+        field(1; "Entry No."; Integer) { AutoIncrement = true; Editable = false; }
         field(2; "Header Entry No."; Integer)
         {
             TableRelation = "PO Import Header"."Entry No.";

@@ -4,7 +4,7 @@ table 50132 "TO Import Header"
 
     fields
     {
-        field(1; "Entry No."; Integer) { AutoIncrement = true; }
+        field(1; "Entry No."; Integer) { AutoIncrement = true; Editable = false; }
         field(2; "External Document No."; Code[50]) { }
         field(3; "Transfer-from Code"; Code[10]) { }
         field(4; "Transfer-to Code"; Code[10]) { }
