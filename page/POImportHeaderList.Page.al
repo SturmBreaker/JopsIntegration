@@ -72,6 +72,8 @@ page 50127 "PO Import Header List"
                 ApplicationArea = All;
                 Caption = 'Process Selected';
                 Image = CreateDocument;
+                promoted = true;
+                PromotedIsBig = true;
                 ToolTip = 'Create purchase orders from the selected pending staging records.';
 
                 trigger OnAction()
@@ -88,6 +90,8 @@ page 50127 "PO Import Header List"
             {
                 ApplicationArea = All;
                 Caption = 'Archive Staging';
+                promoted = true;
+                PromotedIsBig = true;
                 Image = Archive;
                 ToolTip = 'Archive processed and errored purchase staging records using optional filters.';
 
@@ -95,6 +99,30 @@ page 50127 "PO Import Header List"
                 var
                 begin
                     Report.RunModal(Report::"PO Archive Report");
+                    CurrPage.Update(false);
+                end;
+            }
+            action(ClearErrors)
+            {
+                ApplicationArea = All;
+                Caption = 'Clear Errors';
+                Image = ClearLog;
+                promoted = true;
+                PromotedIsBig = true;
+                ToolTip = 'Reset selected purchase imports to pending and clear their error messages.';
+
+                trigger OnAction()
+                var
+                    ImportHeader: Record "PO Import Header";
+                begin
+                    CurrPage.SetSelectionFilter(ImportHeader);
+                    if ImportHeader.FindSet(true) then
+                        repeat
+                            ImportHeader.Status := ImportHeader.Status::Pending;
+                            ImportHeader."Error Message" := '';
+                            ImportHeader."Webhook Error Message" := '';
+                            ImportHeader.Modify();
+                        until ImportHeader.Next() = 0;
                     CurrPage.Update(false);
                 end;
             }

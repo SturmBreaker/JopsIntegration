@@ -61,6 +61,8 @@ page 50143 "TO Import Header List"
                 ApplicationArea = All;
                 Caption = 'Process Selected';
                 Image = CreateDocument;
+                promoted = true;
+                PromotedIsBig = true;
                 ToolTip = 'Create transfer orders from the selected pending staging records.';
 
                 trigger OnAction()
@@ -78,11 +80,37 @@ page 50143 "TO Import Header List"
                 ApplicationArea = All;
                 Caption = 'Archive Staging';
                 Image = Archive;
+                promoted = true;
+                PromotedIsBig = true;
                 ToolTip = 'Archive processed and errored transfer staging records using optional filters.';
 
                 trigger OnAction()
                 begin
                     Report.RunModal(Report::"TO Archive Report");
+                    CurrPage.Update(false);
+                end;
+            }
+            action(ClearErrors)
+            {
+                ApplicationArea = All;
+                Caption = 'Clear Errors';
+                Image = ClearLog;
+                promoted = true;
+                PromotedIsBig = true;
+                ToolTip = 'Reset selected transfer imports to pending and clear their error messages.';
+
+                trigger OnAction()
+                var
+                    ImportHeader: Record "TO Import Header";
+                begin
+                    CurrPage.SetSelectionFilter(ImportHeader);
+                    if ImportHeader.FindSet(true) then
+                        repeat
+                            ImportHeader.Status := ImportHeader.Status::Pending;
+                            ImportHeader."Error Message" := '';
+                            ImportHeader."Webhook Error Message" := '';
+                            ImportHeader.Modify();
+                        until ImportHeader.Next() = 0;
                     CurrPage.Update(false);
                 end;
             }
