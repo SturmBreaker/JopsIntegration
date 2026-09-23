@@ -29,6 +29,8 @@ codeunit 50106 "SO Import Worker"
         if ImportHeader."Currency Code" <> '' then
             SalesHeader.Validate("Currency Code", ImportHeader."Currency Code");
         SalesHeader.Validate("External Document No.", ImportHeader."External Document No.");
+        SalesHeader.Ship := true;
+        SalesHeader.Invoice := true;
         SalesHeader.Modify(true);
 
         ImportLine.SetCurrentKey("Header Entry No.", "Line No.");
@@ -61,22 +63,14 @@ codeunit 50106 "SO Import Worker"
         until ImportLine.Next() = 0;
 
         SalesOrderNo := SalesHeader."No.";
-        if not SetupMgt.IsSalesPostingEnabled() then begin
-            ImportHeader."Sales Order No." := SalesOrderNo;
-            ImportHeader.Modify(true);
+        ImportHeader."Sales Order No." := SalesOrderNo;
+        ImportHeader.Modify(true);
+        if not SetupMgt.IsSalesPostingEnabled() then
             exit;
-        end;
 
-        SalesHeader.Validate(Ship, true);
-        SalesHeader.Validate(Invoice, true);
-        SalesHeader.Modify(true);
+        commit;
 
-
-        exit;
-        if Codeunit.Run(Codeunit::"Sales-Post", SalesHeader) then begin
-            ImportHeader."Sales Order No." := SalesOrderNo;
-            ImportHeader.Modify(true);
-        end else
+        if not Codeunit.Run(Codeunit::"Sales-Post", SalesHeader) then
             Error('Sales order %1 could not be posted. %2', SalesOrderNo, GetLastErrorText());
 
         SalesShipmentHeader.SetRange("Order No.", SalesOrderNo);
@@ -86,7 +80,7 @@ codeunit 50106 "SO Import Worker"
         if not SalesInvoiceHeader.FindFirst() then
             Error('Posted invoice for sales order %1 could not be found.', SalesOrderNo);
 
-        ImportHeader."Sales Order No." := SalesOrderNo;
+        ImportHeader.FindFirst();
         ImportHeader."Shipment No." := SalesShipmentHeader."No.";
         ImportHeader."Invoice No." := SalesInvoiceHeader."No.";
         ImportHeader.Modify(true);
