@@ -16,7 +16,6 @@ codeunit 50106 "SO Import Worker"
         SalesShipmentHeader: Record "Sales Shipment Header";
         SalesInvoiceHeader: Record "Sales Invoice Header";
         SetupMgt: Codeunit "Order Integration Setup Mgt.";
-        SalesPost: Codeunit "Sales-Post";
         SalesOrderNo: Code[20];
         NextLineNo: Integer;
     begin
@@ -72,13 +71,11 @@ codeunit 50106 "SO Import Worker"
         SalesHeader.Validate(Invoice, true);
         SalesHeader.Modify(true);
 
-        if SalesPost.Run(SalesHeader) then begin
+        if Codeunit.Run(Codeunit::"Sales-Post", SalesHeader) then begin
             ImportHeader."Sales Order No." := SalesOrderNo;
             ImportHeader.Modify(true);
         end else
             Error('Sales order %1 could not be posted. %2', SalesOrderNo, GetLastErrorText());
-        // if not Codeunit.Run(Codeunit::"Sales-Post", SalesHeader) then
-        //     Error('Sales order %1 could not be posted. %2', SalesHeader."No.", GetLastErrorText());
 
         SalesShipmentHeader.SetRange("Order No.", SalesOrderNo);
         if not SalesShipmentHeader.FindFirst() then
