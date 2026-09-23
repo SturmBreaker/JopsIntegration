@@ -25,6 +25,33 @@ table 50149 "Order Integration Setup"
             Caption = 'Enable Transfer Posting';
             InitValue = true;
         }
+        field(6; "Enable Sales Webhook"; Boolean)
+        {
+            Caption = 'Enable Sales Webhook';
+            InitValue = false;
+        }
+        field(7; "Sales Webhook HTTP Endpoint"; Text[2048])
+        {
+            Caption = 'Sales Webhook HTTP Endpoint';
+        }
+        field(8; "Enable Purchase Webhook"; Boolean)
+        {
+            Caption = 'Enable Purchase Webhook';
+            InitValue = false;
+        }
+        field(9; "Purchase Webhook HTTP Endpoint"; Text[2048])
+        {
+            Caption = 'Purchase Webhook HTTP Endpoint';
+        }
+        field(10; "Enable Transfer Webhook"; Boolean)
+        {
+            Caption = 'Enable Transfer Webhook';
+            InitValue = false;
+        }
+        field(11; "Transfer Webhook HTTP Endpoint"; Text[2048])
+        {
+            Caption = 'Transfer Webhook HTTP Endpoint';
+        }
     }
 
     keys

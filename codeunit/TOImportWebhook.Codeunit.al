@@ -15,8 +15,14 @@ codeunit 50137 "TO Import Webhook"
         Response: HttpResponseMessage;
         Payload: JsonObject;
         RequestBody: Text;
+        SetupMgt: Codeunit "Order Integration Setup Mgt.";
     begin
-        // Replace this placeholder with the external system's transfer webhook endpoint.
+        if not SetupMgt.IsTransferWebhookEnabled() then
+            exit;
+
+        if SetupMgt.GetTransferWebhookEndpoint() = '' then
+            Error('The transfer webhook is enabled, but its HTTP endpoint is not configured.');
+
         Payload.Add('entryNo', ImportHeader."Entry No.");
         Payload.Add('externalDocumentNo', ImportHeader."External Document No.");
         Payload.Add('status', Format(ImportHeader.Status));
@@ -29,14 +35,9 @@ codeunit 50137 "TO Import Webhook"
         ContentHeaders.Clear();
         ContentHeaders.Add('Content-Type', 'application/json');
 
-        if not Client.Post(WebhookEndpoint(), Content, Response) then
+        if not Client.Post(SetupMgt.GetTransferWebhookEndpoint(), Content, Response) then
             Error('The transfer order status webhook request could not be sent.');
         if not Response.IsSuccessStatusCode() then
             Error('The transfer order status webhook returned HTTP status %1.', Response.HttpStatusCode());
-    end;
-
-    local procedure WebhookEndpoint(): Text
-    begin
-        exit('https://REPLACE-WITH-TRANSFER-ENDPOINT');
     end;
 }
