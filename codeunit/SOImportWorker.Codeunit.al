@@ -71,6 +71,8 @@ codeunit 50106 "SO Import Worker"
         SalesHeader.Validate(Invoice, true);
         SalesHeader.Modify(true);
 
+
+        exit;
         if Codeunit.Run(Codeunit::"Sales-Post", SalesHeader) then begin
             ImportHeader."Sales Order No." := SalesOrderNo;
             ImportHeader.Modify(true);
