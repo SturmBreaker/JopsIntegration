@@ -54,6 +54,8 @@ codeunit 50106 "SO Import Worker"
                 SalesLine.Validate(Description, ImportLine.Description);
             SalesLine.Validate(Quantity, ImportLine.Quantity);
             SalesLine.Validate("Unit Price", ImportLine."Unit Price");
+            SalesLine.Validate("Qty. to Ship", ImportLine.Quantity);
+            SalesLine.Validate("Qty. to Invoice", ImportLine.Quantity);
             SalesLine.Modify(true);
             NextLineNo += 10000;
         until ImportLine.Next() = 0;
