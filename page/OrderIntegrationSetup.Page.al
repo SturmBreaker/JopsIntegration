@@ -17,6 +17,21 @@ page 50151 "Order Integration Setup"
                     ApplicationArea = All;
                     ToolTip = 'Specifies whether API integration telemetry is sent to Application Insights.';
                 }
+                field("Enable Sales Posting"; Rec."Enable Sales Posting")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies whether imported sales orders are posted automatically.';
+                }
+                field("Enable Purchase Posting"; Rec."Enable Purchase Posting")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies whether imported purchase orders are posted automatically.';
+                }
+                field("Enable Transfer Posting"; Rec."Enable Transfer Posting")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies whether imported transfer orders are posted automatically.';
+                }
             }
         }
     }

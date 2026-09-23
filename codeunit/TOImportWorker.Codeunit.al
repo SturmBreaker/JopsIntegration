@@ -15,6 +15,7 @@ codeunit 50136 "TO Import Worker"
         ImportLine: Record "TO Import Line";
         TransferShipmentHeader: Record "Transfer Shipment Header";
         TransferReceiptHeader: Record "Transfer Receipt Header";
+        SetupMgt: Codeunit "Order Integration Setup Mgt.";
         TransferOrderNo: Code[20];
         NextLineNo: Integer;
     begin
@@ -53,6 +54,12 @@ codeunit 50136 "TO Import Worker"
         until ImportLine.Next() = 0;
 
         TransferOrderNo := TransferHeader."No.";
+        if not SetupMgt.IsTransferPostingEnabled() then begin
+            ImportHeader."Transfer Order No." := TransferOrderNo;
+            ImportHeader.Modify(true);
+            exit;
+        end;
+
         if not Codeunit.Run(Codeunit::"TransferOrder-Post Transfer", TransferHeader) then
             Error('Transfer order %1 could not be posted through receipt. %2', TransferHeader."No.", GetLastErrorText());
 

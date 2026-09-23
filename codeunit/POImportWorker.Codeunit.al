@@ -15,6 +15,7 @@ codeunit 50119 "PO Import Worker"
         ImportLine: Record "PO Import Line";
         PurchReceiptHeader: Record "Purch. Rcpt. Header";
         PurchInvoiceHeader: Record "Purch. Inv. Header";
+        SetupMgt: Codeunit "Order Integration Setup Mgt.";
         PurchaseOrderNo: Code[20];
         NextLineNo: Integer;
     begin
@@ -58,6 +59,12 @@ codeunit 50119 "PO Import Worker"
         until ImportLine.Next() = 0;
 
         PurchaseOrderNo := PurchaseHeader."No.";
+        if not SetupMgt.IsPurchasePostingEnabled() then begin
+            ImportHeader."Purchase Order No." := PurchaseOrderNo;
+            ImportHeader.Modify(true);
+            exit;
+        end;
+
         PurchaseHeader.Validate(Receive, true);
         PurchaseHeader.Validate(Invoice, true);
         PurchaseHeader.Modify(true);

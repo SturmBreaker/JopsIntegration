@@ -15,6 +15,7 @@ codeunit 50106 "SO Import Worker"
         ImportLine: Record "SO Import Line";
         SalesShipmentHeader: Record "Sales Shipment Header";
         SalesInvoiceHeader: Record "Sales Invoice Header";
+        SetupMgt: Codeunit "Order Integration Setup Mgt.";
         SalesOrderNo: Code[20];
         NextLineNo: Integer;
     begin
@@ -58,9 +59,16 @@ codeunit 50106 "SO Import Worker"
         until ImportLine.Next() = 0;
 
         SalesOrderNo := SalesHeader."No.";
+        if not SetupMgt.IsSalesPostingEnabled() then begin
+            ImportHeader."Sales Order No." := SalesOrderNo;
+            ImportHeader.Modify(true);
+            exit;
+        end;
+
         SalesHeader.Validate(Ship, true);
         SalesHeader.Validate(Invoice, true);
         SalesHeader.Modify(true);
+
         if not Codeunit.Run(Codeunit::"Sales-Post", SalesHeader) then
             Error('Sales order %1 could not be posted. %2', SalesHeader."No.", GetLastErrorText());
 
