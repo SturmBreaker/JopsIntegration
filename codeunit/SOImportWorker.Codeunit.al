@@ -13,10 +13,6 @@ codeunit 50106 "SO Import Worker"
         SalesHeader: Record "Sales Header";
         SalesLine: Record "Sales Line";
         ImportLine: Record "SO Import Line";
-        SalesShipmentHeader: Record "Sales Shipment Header";
-        SalesInvoiceHeader: Record "Sales Invoice Header";
-        SetupMgt: Codeunit "Order Integration Setup Mgt.";
-        SalesOrderNo: Code[20];
         NextLineNo: Integer;
     begin
         SalesHeader.Init();
@@ -62,27 +58,7 @@ codeunit 50106 "SO Import Worker"
             NextLineNo += 10000;
         until ImportLine.Next() = 0;
 
-        SalesOrderNo := SalesHeader."No.";
-        ImportHeader."Sales Order No." := SalesOrderNo;
-        ImportHeader.Modify(true);
-        if not SetupMgt.IsSalesPostingEnabled() then
-            exit;
-
-        commit;
-
-        if not Codeunit.Run(Codeunit::"Sales-Post", SalesHeader) then
-            Error('Sales order %1 could not be posted. %2', SalesOrderNo, GetLastErrorText());
-
-        SalesShipmentHeader.SetRange("Order No.", SalesOrderNo);
-        if not SalesShipmentHeader.FindFirst() then
-            Error('Posted shipment for sales order %1 could not be found.', SalesOrderNo);
-        SalesInvoiceHeader.SetRange("Order No.", SalesOrderNo);
-        if not SalesInvoiceHeader.FindFirst() then
-            Error('Posted invoice for sales order %1 could not be found.', SalesOrderNo);
-
-        ImportHeader.FindFirst();
-        ImportHeader."Shipment No." := SalesShipmentHeader."No.";
-        ImportHeader."Invoice No." := SalesInvoiceHeader."No.";
+        ImportHeader."Sales Order No." := SalesHeader."No.";
         ImportHeader.Modify(true);
     end;
 }

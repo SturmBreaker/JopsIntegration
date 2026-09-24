@@ -28,48 +28,36 @@ page 50152 "Order Integration Role Center"
             {
                 ApplicationArea = All;
                 Caption = 'Sales Import Headers';
-                Promoted = true;
-                PromotedIsBig = true;
                 RunObject = page "SO Import Header List";
             }
             action(SalesImportLines)
             {
                 ApplicationArea = All;
                 Caption = 'Sales Import Lines';
-                Promoted = true;
-                PromotedIsBig = true;
                 RunObject = page "SO Import Line List";
             }
             action(PurchaseImportHeaders)
             {
                 ApplicationArea = All;
                 Caption = 'Purchase Import Headers';
-                Promoted = true;
-                PromotedIsBig = true;
                 RunObject = page "PO Import Header List";
             }
             action(PurchaseImportLines)
             {
                 ApplicationArea = All;
                 Caption = 'Purchase Import Lines';
-                Promoted = true;
-                PromotedIsBig = true;
                 RunObject = page "PO Import Line List";
             }
             action(TransferImportHeaders)
             {
                 ApplicationArea = All;
                 Caption = 'Transfer Import Headers';
-                Promoted = true;
-                PromotedIsBig = true;
                 RunObject = page "TO Import Header List";
             }
             action(TransferImportLines)
             {
                 ApplicationArea = All;
                 Caption = 'Transfer Import Lines';
-                Promoted = true;
-                PromotedIsBig = true;
                 RunObject = page "TO Import Line List";
             }
         }
