@@ -30,6 +30,7 @@ codeunit 50105 "SO Import Processor"
         SalesShipmentHeader: Record "Sales Shipment Header";
         SalesInvoiceHeader: Record "Sales Invoice Header";
         SetupMgt: Codeunit "Order Integration Setup Mgt.";
+        ImportHeaderLoc: record "SO Import Header";
     begin
         if not ImportHeader.FindSet() then
             exit;
@@ -39,28 +40,31 @@ codeunit 50105 "SO Import Processor"
                 if Codeunit.Run(Codeunit::"SO Import Worker", ImportHeader) then begin
                     SalesShipmentHeader.SetRange("Order No.", ImportHeader."Sales Order No.");
                     SalesShipmentHeader.FindLast();
-                    ImportHeader."Shipment No." := SalesShipmentHeader."No.";
-                    SalesInvoiceHeader.SetRange("Order No.", ImportHeader."Sales Order No.");
+                    ImportHeaderLoc.Get(ImportHeader."Entry No.");
+                    ImportHeaderLoc."Shipment No." := SalesShipmentHeader."No.";
+                    SalesInvoiceHeader.SetRange("Order No.", ImportHeaderLoc."Sales Order No.");
                     SalesInvoiceHeader.FindLast();
-                    ImportHeader."Invoice No." := SalesInvoiceHeader."No.";
-                    ImportHeader.Status := ImportHeader.Status::Processed;
-                    ImportHeader."Error Message" := '';
+                    ImportHeaderLoc."Invoice No." := SalesInvoiceHeader."No.";
+                    ImportHeaderLoc.Status := ImportHeaderLoc.Status::Processed;
+                    ImportHeaderLoc."Error Message" := '';
                 end else begin
-                    ImportHeader.Status := ImportHeader.Status::Error;
-                    ImportHeader."Error Message" := CopyStr(GetLastErrorText(), 1, MaxStrLen(ImportHeader."Error Message"));
+                    ImportHeaderLoc.Get(ImportHeader."Entry No.");
+                    ImportHeaderLoc.Status := ImportHeaderLoc.Status::Error;
+                    ImportHeaderLoc."Error Message" := CopyStr(GetLastErrorText(), 1, MaxStrLen(ImportHeaderLoc."Error Message"));
                 end;
-                ImportHeader.Modify(true);
+                ImportHeaderLoc.Modify(true);
             end;
 
             if SetupMgt.IsSalesWebhookEnabled() then begin
+                ImportHeaderLoc.Get(ImportHeader."Entry No.");
                 if Codeunit.Run(Codeunit::"SO Import Webhook", ImportHeader) then begin
-                    ImportHeader."Webhook Status" := ImportHeader."Webhook Status"::Sent;
-                    ImportHeader."Webhook Error Message" := '';
+                    ImportHeaderLoc."Webhook Status" := ImportHeaderLoc."Webhook Status"::Sent;
+                    ImportHeaderLoc."Webhook Error Message" := '';
                 end else begin
-                    ImportHeader."Webhook Status" := ImportHeader."Webhook Status"::Error;
-                    ImportHeader."Webhook Error Message" := CopyStr(GetLastErrorText(), 1, MaxStrLen(ImportHeader."Webhook Error Message"));
+                    ImportHeaderLoc."Webhook Status" := ImportHeaderLoc."Webhook Status"::Error;
+                    ImportHeaderLoc."Webhook Error Message" := CopyStr(GetLastErrorText(), 1, MaxStrLen(ImportHeaderLoc."Webhook Error Message"));
                 end;
-                ImportHeader.Modify(true);
+                ImportHeaderLoc.Modify(true);
             end;
             Commit();
         until ImportHeader.Next() = 0;

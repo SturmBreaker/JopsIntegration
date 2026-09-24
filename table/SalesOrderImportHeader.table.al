@@ -50,8 +50,8 @@ table 50101 "SO Import Header"
     var
         SOImportLine: Record "SO Import Line";
     begin
-        if Status = Status::Processed then
-            Error(CannotDeleteProcessedErr, "External Document No.");
+        // if Status = Status::Processed then
+        //     Error(CannotDeleteProcessedErr, "External Document No.");
 
         SOImportLine.SetRange("Header Entry No.", "Entry No.");
         SOImportLine.DeleteAll(true);

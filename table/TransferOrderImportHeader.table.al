@@ -37,8 +37,8 @@ table 50132 "TO Import Header"
     var
         TOImportLine: Record "TO Import Line";
     begin
-        if Status = Status::Processed then
-            Error(CannotDeleteProcessedErr, "External Document No.");
+        // if Status = Status::Processed then
+        //     Error(CannotDeleteProcessedErr, "External Document No.");
 
         TOImportLine.SetRange("Header Entry No.", "Entry No.");
         TOImportLine.DeleteAll(true);

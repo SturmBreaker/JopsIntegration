@@ -65,6 +65,6 @@ codeunit 50119 "PO Import Worker"
         ImportHeader.Modify(true);
 
         if SetupMgt.IsPurchasePostingEnabled() then
-            Codeunit.Run(Codeunit::"Purch.-Post");
+            Codeunit.Run(Codeunit::"Purch.-Post", PurchaseHeader);
     end;
 }

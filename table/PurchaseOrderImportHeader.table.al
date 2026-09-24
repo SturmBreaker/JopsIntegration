@@ -31,8 +31,8 @@ table 50115 "PO Import Header"
     var
         POImportLine: Record "PO Import Line";
     begin
-        if Status = Status::Processed then
-            Error(CannotDeleteProcessedErr, "External Document No.");
+        // if Status = Status::Processed then
+        //     Error(CannotDeleteProcessedErr, "External Document No.");
 
         POImportLine.SetRange("Header Entry No.", "Entry No.");
         POImportLine.DeleteAll(true);
