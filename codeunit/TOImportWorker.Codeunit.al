@@ -13,6 +13,7 @@ codeunit 50136 "TO Import Worker"
         TransferHeader: Record "Transfer Header";
         TransferLine: Record "Transfer Line";
         ImportLine: Record "TO Import Line";
+        SetupMgt: Codeunit "Order Integration Setup Mgt.";
         NextLineNo: Integer;
     begin
         TransferHeader.Init();
@@ -51,5 +52,8 @@ codeunit 50136 "TO Import Worker"
 
         ImportHeader."Transfer Order No." := TransferHeader."No.";
         ImportHeader.Modify(true);
+
+        if SetupMgt.IsTransferPostingEnabled() then
+            Codeunit.Run(Codeunit::"TransferOrder-Post Transfer", TransferHeader);
     end;
 }
