@@ -84,8 +84,6 @@ page 50103 "SO Import Header List"
                 begin
                     CurrPage.SetSelectionFilter(ImportHeader);
                     ImportProcessor.ProcessSelected(ImportHeader);
-                    if Rec."Entry No." <> 0 then
-                        Rec.Get(Rec."Entry No.");
                     CurrPage.Update(false);
                 end;
             }

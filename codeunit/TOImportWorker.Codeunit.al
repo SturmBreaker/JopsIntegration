@@ -14,6 +14,7 @@ codeunit 50136 "TO Import Worker"
         TransferLine: Record "Transfer Line";
         ImportLine: Record "TO Import Line";
         SetupMgt: Codeunit "Order Integration Setup Mgt.";
+        TOPostTransfer: Codeunit "TransferOrder-Post Transfer";
         NextLineNo: Integer;
     begin
         TransferHeader.Init();
@@ -24,6 +25,7 @@ codeunit 50136 "TO Import Worker"
         if ImportHeader."Order Date" <> 0D then
             TransferHeader.Validate("Posting Date", ImportHeader."Order Date");
         TransferHeader.Validate("External Document No.", ImportHeader."External Document No.");
+        TransferHeader.Validate("Direct Transfer", True);
         TransferHeader.Modify(true);
 
         ImportLine.SetCurrentKey("Header Entry No.", "Line No.");
@@ -53,7 +55,9 @@ codeunit 50136 "TO Import Worker"
         ImportHeader."Transfer Order No." := TransferHeader."No.";
         ImportHeader.Modify(true);
 
-        if SetupMgt.IsTransferPostingEnabled() then
-            Codeunit.Run(Codeunit::"TransferOrder-Post Transfer", TransferHeader);
+        if SetupMgt.IsTransferPostingEnabled() then begin
+            TOPostTransfer.SetSuppressCommit(true);
+            TOPostTransfer.Run(TransferHeader);
+        end;
     end;
 }
