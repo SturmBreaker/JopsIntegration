@@ -32,4 +32,18 @@ table 50132 "TO Import Header"
         key(PK; "Entry No.") { Clustered = true; }
         key(ExternalDocument; "External Document No.") { }
     }
+
+    trigger OnDelete()
+    var
+        TOImportLine: Record "TO Import Line";
+    begin
+        if Status = Status::Processed then
+            Error(CannotDeleteProcessedErr, "External Document No.");
+
+        TOImportLine.SetRange("Header Entry No.", "Entry No.");
+        TOImportLine.DeleteAll(true);
+    end;
+
+    var
+        CannotDeleteProcessedErr: Label 'Cannot delete TO Import Header %1 because it has already been processed.', Comment = '%1 = External Document No.';
 }

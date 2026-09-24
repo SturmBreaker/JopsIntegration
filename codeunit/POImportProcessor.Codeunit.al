@@ -27,6 +27,8 @@ codeunit 50118 "PO Import Processor"
 
     local procedure ProcessHeaders(var ImportHeader: Record "PO Import Header")
     var
+        PurchReceiptHeader: Record "Purch. Rcpt. Header";
+        PurchInvoiceHeader: Record "Purch. Inv. Header";
         SetupMgt: Codeunit "Order Integration Setup Mgt.";
         OrderCreated: Boolean;
     begin
@@ -34,21 +36,22 @@ codeunit 50118 "PO Import Processor"
             exit;
 
         repeat
-            if ImportHeader."Purchase Order No." = '' then
-                OrderCreated := Codeunit.Run(Codeunit::"PO Import Worker", ImportHeader);
-
-            if OrderCreated or (ImportHeader."Purchase Order No." <> '') then begin
-                if SetupMgt.IsPurchasePostingEnabled() then
-                    PostPurchaseOrder(ImportHeader)
-                else begin
+            if ImportHeader."Purchase Order No." = '' then begin
+                if Codeunit.Run(Codeunit::"PO Import Worker", ImportHeader) then begin
                     ImportHeader.Status := ImportHeader.Status::Processed;
                     ImportHeader."Error Message" := '';
+                    PurchReceiptHeader.SetRange("Order No.", ImportHeader."Purchase Order No.");
+                    PurchReceiptHeader.FindLast();
+                    ImportHeader."Receipt No." := PurchReceiptHeader."No.";
+                    PurchInvoiceHeader.SetRange("Order No.", ImportHeader."Purchase Order No.");
+                    PurchInvoiceHeader.FindLast();
+                    ImportHeader."Invoice No." := PurchInvoiceHeader."No.";
+                end else begin
+                    ImportHeader.Status := ImportHeader.Status::Error;
+                    ImportHeader."Error Message" := CopyStr(GetLastErrorText(), 1, MaxStrLen(ImportHeader."Error Message"));
                 end;
-            end else begin
-                ImportHeader.Status := ImportHeader.Status::Error;
-                ImportHeader."Error Message" := CopyStr(GetLastErrorText(), 1, MaxStrLen(ImportHeader."Error Message"));
+                ImportHeader.Modify(true);
             end;
-            ImportHeader.Modify(true);
 
             if SetupMgt.IsPurchaseWebhookEnabled() then begin
                 if Codeunit.Run(Codeunit::"PO Import Webhook", ImportHeader) then begin
@@ -62,31 +65,5 @@ codeunit 50118 "PO Import Processor"
             end;
             Commit();
         until ImportHeader.Next() = 0;
-    end;
-
-    local procedure PostPurchaseOrder(var ImportHeader: Record "PO Import Header")
-    var
-        PurchaseHeader: Record "Purchase Header";
-        PurchReceiptHeader: Record "Purch. Rcpt. Header";
-        PurchInvoiceHeader: Record "Purch. Inv. Header";
-    begin
-        if ImportHeader."Purchase Order No." = '' then
-            exit;
-
-        PurchaseHeader.Get(PurchaseHeader."Document Type"::Order, ImportHeader."Purchase Order No.");
-        if not Codeunit.Run(Codeunit::"Purch.-Post", PurchaseHeader) then begin
-            ImportHeader.Status := ImportHeader.Status::Error;
-            ImportHeader."Error Message" := CopyStr(GetLastErrorText(), 1, MaxStrLen(ImportHeader."Error Message"));
-        end else begin
-            ImportHeader.Status := ImportHeader.Status::Processed;
-            ImportHeader."Error Message" := '';
-            PurchReceiptHeader.SetRange("Order No.", ImportHeader."Purchase Order No.");
-            PurchReceiptHeader.FindLast();
-            ImportHeader."Receipt No." := PurchReceiptHeader."No.";
-            PurchInvoiceHeader.SetRange("Order No.", ImportHeader."Purchase Order No.");
-            PurchInvoiceHeader.FindLast();
-            ImportHeader."Invoice No." := PurchInvoiceHeader."No.";
-        end;
-        ImportHeader.Modify(true);
     end;
 }

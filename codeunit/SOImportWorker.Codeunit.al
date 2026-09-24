@@ -13,6 +13,7 @@ codeunit 50106 "SO Import Worker"
         SalesHeader: Record "Sales Header";
         SalesLine: Record "Sales Line";
         ImportLine: Record "SO Import Line";
+        SetupMgt: Codeunit "Order Integration Setup Mgt.";
         NextLineNo: Integer;
     begin
         SalesHeader.Init();
@@ -60,5 +61,8 @@ codeunit 50106 "SO Import Worker"
 
         ImportHeader."Sales Order No." := SalesHeader."No.";
         ImportHeader.Modify(true);
+
+        if SetupMgt.IsSalesPostingEnabled() then
+            Codeunit.Run(Codeunit::"Sales-Post", SalesHeader);
     end;
 }

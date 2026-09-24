@@ -13,6 +13,7 @@ codeunit 50119 "PO Import Worker"
         PurchaseHeader: Record "Purchase Header";
         PurchaseLine: Record "Purchase Line";
         ImportLine: Record "PO Import Line";
+        SetupMgt: Codeunit "Order Integration Setup Mgt.";
         NextLineNo: Integer;
     begin
         PurchaseHeader.Init();
@@ -62,5 +63,8 @@ codeunit 50119 "PO Import Worker"
 
         ImportHeader."Purchase Order No." := PurchaseHeader."No.";
         ImportHeader.Modify(true);
+
+        if SetupMgt.IsPurchasePostingEnabled() then
+            Codeunit.Run(Codeunit::"Purch.-Post");
     end;
 }

@@ -45,4 +45,18 @@ table 50101 "SO Import Header"
         }
         key(ExternalDocument; "External Document No.") { }
     }
+
+    trigger OnDelete()
+    var
+        SOImportLine: Record "SO Import Line";
+    begin
+        if Status = Status::Processed then
+            Error(CannotDeleteProcessedErr, "External Document No.");
+
+        SOImportLine.SetRange("Header Entry No.", "Entry No.");
+        SOImportLine.DeleteAll(true);
+    end;
+
+    var
+        CannotDeleteProcessedErr: Label 'Cannot delete SO Import Header %1 because it has already been processed.', Comment = '%1 = External Document No.';
 }

@@ -26,4 +26,18 @@ table 50115 "PO Import Header"
         key(PK; "Entry No.") { Clustered = true; }
         key(ExternalDocument; "External Document No.") { }
     }
+
+    trigger OnDelete()
+    var
+        POImportLine: Record "PO Import Line";
+    begin
+        if Status = Status::Processed then
+            Error(CannotDeleteProcessedErr, "External Document No.");
+
+        POImportLine.SetRange("Header Entry No.", "Entry No.");
+        POImportLine.DeleteAll(true);
+    end;
+
+    var
+        CannotDeleteProcessedErr: Label 'Cannot delete PO Import Header %1 because it has already been processed.', Comment = '%1 = External Document No.';
 }
