@@ -15,16 +15,10 @@ table 50115 "PO Import Header"
         field(9; "Purchase Order No."; Code[20]) { }
         field(10; "Webhook Status"; Option) { OptionMembers = Pending,Sent,Error; }
         field(11; "Webhook Error Message"; Text[250]) { }
-        field(12; "Receipt No."; Code[20])
-        {
-            TableRelation = "Purch. Rcpt. Header"."No.";
-            ValidateTableRelation = false;
-        }
-        field(13; "Invoice No."; Code[20])
-        {
-            TableRelation = "Purch. Inv. Header"."No.";
-            ValidateTableRelation = false;
-        }
+        field(12; "Receipt No."; Code[20]) { }
+        field(13; "Invoice No."; Code[20]) { }
+        field(14; "Vendor Shipment No."; Code[35]) { }
+        field(15; "Vendor Invoice No."; Code[35]) { }
     }
 
     keys

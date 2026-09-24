@@ -25,6 +25,10 @@ codeunit 50119 "PO Import Worker"
         if ImportHeader."Currency Code" <> '' then
             PurchaseHeader.Validate("Currency Code", ImportHeader."Currency Code");
         PurchaseHeader.Validate("Vendor Order No.", ImportHeader."External Document No.");
+        if ImportHeader."Vendor Shipment No." <> '' then
+            PurchaseHeader.Validate("Vendor Shipment No.", ImportHeader."Vendor Shipment No.");
+        if ImportHeader."Vendor Invoice No." <> '' then
+            PurchaseHeader.Validate("Vendor Invoice No.", ImportHeader."Vendor Invoice No.");
         PurchaseHeader.Modify(true);
 
         ImportLine.SetCurrentKey("Header Entry No.", "Line No.");

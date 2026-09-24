@@ -14,6 +14,8 @@ page 50127 "PO Import Header List"
                 field("Entry No."; Rec."Entry No.") { ApplicationArea = All; ToolTip = 'Specifies the entry number of the purchase import.'; }
                 field("External Document No."; Rec."External Document No.") { ApplicationArea = All; ToolTip = 'Specifies the document number from the external source system.'; }
                 field("Vendor No."; Rec."Vendor No.") { ApplicationArea = All; ToolTip = 'Specifies the vendor for the purchase order.'; }
+                field("Vendor Shipment No."; Rec."Vendor Shipment No.") { ApplicationArea = All; ToolTip = 'Specifies the vendor shipment number for the purchase order.'; }
+                field("Vendor Invoice No."; Rec."Vendor Invoice No.") { ApplicationArea = All; ToolTip = 'Specifies the vendor invoice number for the purchase order.'; }
                 field("Order Date"; Rec."Order Date") { ApplicationArea = All; ToolTip = 'Specifies the order date for the purchase order.'; }
                 field(Status; Rec.Status) { ApplicationArea = All; ToolTip = 'Specifies the processing status of the purchase import.'; }
                 field("Purchase Order No."; Rec."Purchase Order No.")

@@ -18,6 +18,8 @@ page 50124 "PO Import Headers"
             field(entryNo; Rec."Entry No.") { ToolTip = 'Specifies the entry number of the purchase import.'; }
             field(externalDocumentNo; Rec."External Document No.") { ToolTip = 'Specifies the document number from the external source system.'; }
             field(vendorNo; Rec."Vendor No.") { ToolTip = 'Specifies the vendor for the purchase order.'; }
+            field(vendorShipmentNo; Rec."Vendor Shipment No.") { ToolTip = 'Specifies the vendor shipment number for the purchase order.'; }
+            field(vendorInvoiceNo; Rec."Vendor Invoice No.") { ToolTip = 'Specifies the vendor invoice number for the purchase order.'; }
             field(orderDate; Rec."Order Date") { ToolTip = 'Specifies the order date for the purchase order.'; }
             field(currencyCode; Rec."Currency Code") { ToolTip = 'Specifies the currency for the purchase order.'; }
             field(status; Rec.Status) { ToolTip = 'Specifies the processing status of the purchase import.'; }
