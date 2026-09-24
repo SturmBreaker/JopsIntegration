@@ -13,10 +13,6 @@ codeunit 50119 "PO Import Worker"
         PurchaseHeader: Record "Purchase Header";
         PurchaseLine: Record "Purchase Line";
         ImportLine: Record "PO Import Line";
-        PurchReceiptHeader: Record "Purch. Rcpt. Header";
-        PurchInvoiceHeader: Record "Purch. Inv. Header";
-        SetupMgt: Codeunit "Order Integration Setup Mgt.";
-        PurchaseOrderNo: Code[20];
         NextLineNo: Integer;
     begin
         PurchaseHeader.Init();
@@ -58,29 +54,7 @@ codeunit 50119 "PO Import Worker"
             NextLineNo += 10000;
         until ImportLine.Next() = 0;
 
-        PurchaseOrderNo := PurchaseHeader."No.";
-        if not SetupMgt.IsPurchasePostingEnabled() then begin
-            ImportHeader."Purchase Order No." := PurchaseOrderNo;
-            ImportHeader.Modify(true);
-            exit;
-        end;
-
-        PurchaseHeader.Validate(Receive, true);
-        PurchaseHeader.Validate(Invoice, true);
-        PurchaseHeader.Modify(true);
-        if not Codeunit.Run(Codeunit::"Purch.-Post", PurchaseHeader) then
-            Error('Purchase order %1 could not be posted. %2', PurchaseHeader."No.", GetLastErrorText());
-
-        PurchReceiptHeader.SetRange("Order No.", PurchaseOrderNo);
-        if not PurchReceiptHeader.FindFirst() then
-            Error('Posted receipt for purchase order %1 could not be found.', PurchaseOrderNo);
-        PurchInvoiceHeader.SetRange("Order No.", PurchaseOrderNo);
-        if not PurchInvoiceHeader.FindFirst() then
-            Error('Posted invoice for purchase order %1 could not be found.', PurchaseOrderNo);
-
-        ImportHeader."Purchase Order No." := PurchaseOrderNo;
-        ImportHeader."Receipt No." := PurchReceiptHeader."No.";
-        ImportHeader."Invoice No." := PurchInvoiceHeader."No.";
+        ImportHeader."Purchase Order No." := PurchaseHeader."No.";
         ImportHeader.Modify(true);
     end;
 }

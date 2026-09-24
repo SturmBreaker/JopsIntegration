@@ -18,18 +18,31 @@ codeunit 50135 "TO Import Processor"
     procedure ProcessSelected(var ImportHeader: Record "TO Import Header")
     begin
         ImportHeader.SetRange(Status, ImportHeader.Status::Pending);
+        ImportHeader.SetFilter("Shipment No.", '=%1', '');
+        ImportHeader.SetFilter("Receipt No.", '=%1', '');
         ProcessHeaders(ImportHeader);
     end;
 
     local procedure ProcessHeaders(var ImportHeader: Record "TO Import Header")
+    var
+        SetupMgt: Codeunit "Order Integration Setup Mgt.";
+        OrderCreated: Boolean;
     begin
         if not ImportHeader.FindSet() then
             exit;
 
         repeat
-            if Codeunit.Run(Codeunit::"TO Import Worker", ImportHeader) then begin
-                ImportHeader.Status := ImportHeader.Status::Processed;
-                ImportHeader."Error Message" := '';
+            OrderCreated := false;
+            if ImportHeader."Transfer Order No." = '' then
+                OrderCreated := Codeunit.Run(Codeunit::"TO Import Worker", ImportHeader);
+
+            if OrderCreated or (ImportHeader."Transfer Order No." <> '') then begin
+                if SetupMgt.IsTransferPostingEnabled() then
+                    PostTransferOrder(ImportHeader)
+                else begin
+                    ImportHeader.Status := ImportHeader.Status::Processed;
+                    ImportHeader."Error Message" := '';
+                end;
             end else begin
                 ImportHeader.Status := ImportHeader.Status::Error;
                 ImportHeader."Error Message" := CopyStr(GetLastErrorText(), 1, MaxStrLen(ImportHeader."Error Message"));
@@ -49,5 +62,31 @@ codeunit 50135 "TO Import Processor"
             ImportHeader.Modify(true);
             Commit();
         until ImportHeader.Next() = 0;
+    end;
+
+    local procedure PostTransferOrder(var ImportHeader: Record "TO Import Header")
+    var
+        TransferHeader: Record "Transfer Header";
+        TransferShipmentHeader: Record "Transfer Shipment Header";
+        TransferReceiptHeader: Record "Transfer Receipt Header";
+    begin
+        if ImportHeader."Transfer Order No." = '' then
+            exit;
+
+        TransferHeader.Get(TransferHeader."No.", ImportHeader."Transfer Order No.");
+        if not Codeunit.Run(Codeunit::"TransferOrder-Post Transfer", TransferHeader) then begin
+            ImportHeader.Status := ImportHeader.Status::Error;
+            ImportHeader."Error Message" := CopyStr(GetLastErrorText(), 1, MaxStrLen(ImportHeader."Error Message"));
+        end else begin
+            ImportHeader.Status := ImportHeader.Status::Processed;
+            ImportHeader."Error Message" := '';
+            TransferShipmentHeader.SetRange("Transfer Order No.", ImportHeader."Transfer Order No.");
+            TransferShipmentHeader.FindLast();
+            ImportHeader."Shipment No." := TransferShipmentHeader."No.";
+            TransferReceiptHeader.SetRange("Transfer Order No.", ImportHeader."Transfer Order No.");
+            TransferReceiptHeader.FindLast();
+            ImportHeader."Receipt No." := TransferReceiptHeader."No.";
+        end;
+        ImportHeader.Modify(true);
     end;
 }
