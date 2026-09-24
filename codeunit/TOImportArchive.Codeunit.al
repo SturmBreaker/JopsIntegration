@@ -3,40 +3,19 @@ codeunit 50140 "TO Import Archive"
     TableNo = "TO Import Header";
 
     trigger OnRun()
-    begin
-        ArchiveFiltered(0D, 0D, '', '');
-    end;
-
-    procedure ArchiveFiltered(FromDate: Date; ToDate: Date; TransferOrderNo: Code[20]; ItemNo: Code[20])
     var
         ImportHeader: Record "TO Import Header";
     begin
-        ImportHeader.SetFilter(Status, '<>%1', ImportHeader.Status::Pending);
-        if (FromDate <> 0D) and (ToDate <> 0D) then
-            ImportHeader.SetRange("Order Date", FromDate, ToDate)
-        else
-            if FromDate <> 0D then
-                ImportHeader.SetFilter("Order Date", '>=%1', FromDate)
-            else
-                if ToDate <> 0D then
-                    ImportHeader.SetFilter("Order Date", '<=%1', ToDate);
-        if TransferOrderNo <> '' then
-            ImportHeader.SetRange("Transfer Order No.", TransferOrderNo);
-
-        if ImportHeader.FindSet() then
-            repeat
-                if (ItemNo = '') or HasItem(ImportHeader."Entry No.", ItemNo) then
-                    ArchiveHeader(ImportHeader);
-            until ImportHeader.Next() = 0;
+        ImportHeader.SetRange(Status, ImportHeader.Status::Processed);
+        ArchiveFiltered(ImportHeader);
     end;
 
-    local procedure HasItem(HeaderEntryNo: Integer; ItemNo: Code[20]): Boolean
-    var
-        ImportLine: Record "TO Import Line";
+    procedure ArchiveFiltered(var ImportHeader: Record "TO Import Header")
     begin
-        ImportLine.SetRange("Header Entry No.", HeaderEntryNo);
-        ImportLine.SetRange("Item No.", ItemNo);
-        exit(not ImportLine.IsEmpty());
+        if ImportHeader.FindSet() then
+            repeat
+                ArchiveHeader(ImportHeader);
+            until ImportHeader.Next() = 0;
     end;
 
     local procedure ArchiveHeader(var ImportHeader: Record "TO Import Header")

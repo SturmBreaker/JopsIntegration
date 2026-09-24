@@ -12,6 +12,8 @@ codeunit 50105 "SO Import Processor"
         ImportHeader: Record "SO Import Header";
     begin
         ImportHeader.SetRange(Status, ImportHeader.Status::Pending);
+        importHeader.SetFilter("Shipment No.", '=%1', '');
+        importHeader.SetFilter("Invoice No.", '=%1', '');
         ProcessHeaders(ImportHeader);
     end;
 
@@ -43,8 +45,8 @@ codeunit 50105 "SO Import Processor"
                 ImportHeader."Error Message" := CopyStr(GetLastErrorText(), 1, MaxStrLen(ImportHeader."Error Message"));
             end;
 
-            ImportHeader."Webhook Status" := ImportHeader."Webhook Status"::Pending;
-            ImportHeader."Webhook Error Message" := '';
+            // ImportHeader."Webhook Status" := ImportHeader."Webhook Status"::Pending;
+            // ImportHeader."Webhook Error Message" := '';
             ImportHeader.Modify(true);
 
             if SetupMgt.IsSalesWebhookEnabled() then begin

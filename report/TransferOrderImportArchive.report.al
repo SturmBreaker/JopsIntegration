@@ -9,6 +9,8 @@ report 50145 "TO Archive Report"
     {
         dataitem(ImportHeader; "TO Import Header")
         {
+            RequestFilterFields = "Order Date", "Transfer Order No.";
+
             trigger OnPreDataItem()
             begin
                 CurrReport.Break();
@@ -16,46 +18,10 @@ report 50145 "TO Archive Report"
         }
     }
 
-    requestpage
-    {
-        layout
-        {
-            area(content)
-            {
-                field(FromDate; FromDate)
-                {
-                    ApplicationArea = All;
-                    Caption = 'From Order Date';
-                }
-                field(ToDate; ToDate)
-                {
-                    ApplicationArea = All;
-                    Caption = 'To Order Date';
-                }
-                field(TransferOrderNo; TransferOrderNo)
-                {
-                    ApplicationArea = All;
-                    Caption = 'Transfer Order No.';
-                }
-                field(ItemNo; ItemNo)
-                {
-                    ApplicationArea = All;
-                    Caption = 'Item No.';
-                }
-            }
-        }
-    }
-
     trigger OnPreReport()
     var
         ArchiveCodeunit: Codeunit "TO Import Archive";
     begin
-        ArchiveCodeunit.ArchiveFiltered(FromDate, ToDate, TransferOrderNo, ItemNo);
+        ArchiveCodeunit.ArchiveFiltered(ImportHeader);
     end;
-
-    var
-        FromDate: Date;
-        ToDate: Date;
-        TransferOrderNo: Code[20];
-        ItemNo: Code[20];
 }

@@ -3,30 +3,18 @@ codeunit 50123 "PO Import Archive"
     TableNo = "PO Import Header";
 
     trigger OnRun()
-    begin
-        ArchiveFiltered(0D, 0D, '', '');
-    end;
-
-    procedure ArchiveFiltered(FromDate: Date; ToDate: Date; PurchaseOrderNo: Code[20]; ItemNo: Code[20])
     var
         ImportHeader: Record "PO Import Header";
     begin
-        ImportHeader.SetFilter(Status, '<>%1', ImportHeader.Status::Pending);
-        if (FromDate <> 0D) and (ToDate <> 0D) then
-            ImportHeader.SetRange("Order Date", FromDate, ToDate)
-        else
-            if FromDate <> 0D then
-                ImportHeader.SetFilter("Order Date", '>=%1', FromDate)
-            else
-                if ToDate <> 0D then
-                    ImportHeader.SetFilter("Order Date", '<=%1', ToDate);
-        if PurchaseOrderNo <> '' then
-            ImportHeader.SetRange("Purchase Order No.", PurchaseOrderNo);
+        ImportHeader.SetRange(Status, ImportHeader.Status::Processed);
+        ArchiveFiltered(ImportHeader);
+    end;
 
+    procedure ArchiveFiltered(var ImportHeader: Record "PO Import Header")
+    begin
         if ImportHeader.FindSet() then
             repeat
-                if (ItemNo = '') or HasItem(ImportHeader."Entry No.", ItemNo) then
-                    ArchiveHeader(ImportHeader);
+                ArchiveHeader(ImportHeader);
             until ImportHeader.Next() = 0;
     end;
 

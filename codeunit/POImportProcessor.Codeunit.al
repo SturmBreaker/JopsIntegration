@@ -12,6 +12,8 @@ codeunit 50118 "PO Import Processor"
         ImportHeader: Record "PO Import Header";
     begin
         ImportHeader.SetRange(Status, ImportHeader.Status::Pending);
+        ImportHeader.SetFilter("Receipt No.", '=%1', '');
+        ImportHeader.SetFilter("Invoice No.", '=%1', '');
         ProcessHeaders(ImportHeader);
     end;
 
@@ -32,7 +34,6 @@ codeunit 50118 "PO Import Processor"
             exit;
 
         repeat
-            OrderCreated := false;
             if ImportHeader."Purchase Order No." = '' then
                 OrderCreated := Codeunit.Run(Codeunit::"PO Import Worker", ImportHeader);
 
@@ -47,19 +48,18 @@ codeunit 50118 "PO Import Processor"
                 ImportHeader.Status := ImportHeader.Status::Error;
                 ImportHeader."Error Message" := CopyStr(GetLastErrorText(), 1, MaxStrLen(ImportHeader."Error Message"));
             end;
-            ImportHeader."Webhook Status" := ImportHeader."Webhook Status"::Pending;
-            ImportHeader."Webhook Error Message" := '';
             ImportHeader.Modify(true);
-            Commit();
 
-            if Codeunit.Run(Codeunit::"PO Import Webhook", ImportHeader) then begin
-                ImportHeader."Webhook Status" := ImportHeader."Webhook Status"::Sent;
-                ImportHeader."Webhook Error Message" := '';
-            end else begin
-                ImportHeader."Webhook Status" := ImportHeader."Webhook Status"::Error;
-                ImportHeader."Webhook Error Message" := CopyStr(GetLastErrorText(), 1, MaxStrLen(ImportHeader."Webhook Error Message"));
+            if SetupMgt.IsPurchaseWebhookEnabled() then begin
+                if Codeunit.Run(Codeunit::"PO Import Webhook", ImportHeader) then begin
+                    ImportHeader."Webhook Status" := ImportHeader."Webhook Status"::Sent;
+                    ImportHeader."Webhook Error Message" := '';
+                end else begin
+                    ImportHeader."Webhook Status" := ImportHeader."Webhook Status"::Error;
+                    ImportHeader."Webhook Error Message" := CopyStr(GetLastErrorText(), 1, MaxStrLen(ImportHeader."Webhook Error Message"));
+                end;
+                ImportHeader.Modify(true);
             end;
-            ImportHeader.Modify(true);
             Commit();
         until ImportHeader.Next() = 0;
     end;
@@ -74,9 +74,6 @@ codeunit 50118 "PO Import Processor"
             exit;
 
         PurchaseHeader.Get(PurchaseHeader."Document Type"::Order, ImportHeader."Purchase Order No.");
-        PurchaseHeader.Validate(Receive, true);
-        PurchaseHeader.Validate(Invoice, true);
-        PurchaseHeader.Modify(true);
         if not Codeunit.Run(Codeunit::"Purch.-Post", PurchaseHeader) then begin
             ImportHeader.Status := ImportHeader.Status::Error;
             ImportHeader."Error Message" := CopyStr(GetLastErrorText(), 1, MaxStrLen(ImportHeader."Error Message"));

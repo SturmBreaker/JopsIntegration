@@ -9,53 +9,15 @@ report 50131 "PO Archive Report"
     {
         dataitem(ImportHeader; "PO Import Header")
         {
+            RequestFilterFields = "Order Date", "Purchase Order No.";
+
             trigger OnPreDataItem()
+            var
+                ArchiveCodeunit: Codeunit "PO Import Archive";
             begin
+                ArchiveCodeunit.ArchiveFiltered(ImportHeader);
                 CurrReport.Break();
             end;
         }
     }
-
-    requestpage
-    {
-        layout
-        {
-            area(content)
-            {
-                field(FromDate; FromDate)
-                {
-                    ApplicationArea = All;
-                    Caption = 'From Order Date';
-                }
-                field(ToDate; ToDate)
-                {
-                    ApplicationArea = All;
-                    Caption = 'To Order Date';
-                }
-                field(PurchaseOrderNo; PurchaseOrderNo)
-                {
-                    ApplicationArea = All;
-                    Caption = 'Purchase Order No.';
-                }
-                field(ItemNo; ItemNo)
-                {
-                    ApplicationArea = All;
-                    Caption = 'Item No.';
-                }
-            }
-        }
-    }
-
-    trigger OnPreReport()
-    var
-        ArchiveCodeunit: Codeunit "PO Import Archive";
-    begin
-        ArchiveCodeunit.ArchiveFiltered(FromDate, ToDate, PurchaseOrderNo, ItemNo);
-    end;
-
-    var
-        FromDate: Date;
-        ToDate: Date;
-        PurchaseOrderNo: Code[20];
-        ItemNo: Code[20];
 }

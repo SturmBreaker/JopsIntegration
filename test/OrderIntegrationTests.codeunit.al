@@ -81,7 +81,9 @@ codeunit 50148 "Order Integration Tests"
         ImportLine.Quantity := 1;
         ImportLine.Insert();
 
-        Archive.ArchiveFiltered(0D, 0D, 'TO-TEST-001', 'TEST-ITEM');
+        ImportHeader.SetRange(Status, ImportHeader.Status::Processed);
+        ImportHeader.SetRange("Transfer Order No.", 'TO-TEST-001');
+        Archive.ArchiveFiltered(ImportHeader);
 
         if ImportHeader.Get(EntryNo) then
             Error('Processed transfer staging header should be deleted after archiving.');
