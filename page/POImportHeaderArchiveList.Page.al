@@ -1,6 +1,6 @@
 page 50100 "PO Import Header Archive List"
 {
-    Caption = 'PageName';
+    Caption = 'Purchase Order Import Archive';
     PageType = List;
     UsageCategory = History;
     ApplicationArea = All;

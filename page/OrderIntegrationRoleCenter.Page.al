@@ -60,6 +60,24 @@ page 50152 "Order Integration Role Center"
                 Caption = 'Transfer Import Lines';
                 RunObject = page "TO Import Line List";
             }
+            action(SalesImportHeaderArchive)
+            {
+                ApplicationArea = All;
+                Caption = 'Sales Import Header Archive';
+                RunObject = page "SO Import Header Archive List";
+            }
+            action(PurchaseImportHeaderArchive)
+            {
+                ApplicationArea = All;
+                Caption = 'Purchase Import Header Archive';
+                RunObject = page "PO Import Header Archive List";
+            }
+            action(TransferImportHeaderArchive)
+            {
+                ApplicationArea = All;
+                Caption = 'Transfer Import Header Archive';
+                RunObject = page "TO Import Header Archive List";
+            }
         }
         area(processing)
         {
