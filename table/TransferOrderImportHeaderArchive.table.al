@@ -26,6 +26,11 @@ table 50138 "TO Import Header Archive"
             TableRelation = "Transfer Receipt Header"."No.";
             ValidateTableRelation = false;
         }
+        field(15; "Direct Transfer No."; Code[20])
+        {
+            TableRelation = "Direct Trans. Header"."Transfer Order No.";
+            ValidateTableRelation = false;
+        }
     }
 
     keys

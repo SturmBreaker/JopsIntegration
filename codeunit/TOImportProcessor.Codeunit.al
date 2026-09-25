@@ -28,8 +28,9 @@ codeunit 50135 "TO Import Processor"
     local procedure ProcessHeaders(var ImportHeader: Record "TO Import Header")
     var
         ImportHeaderLoc: Record "TO Import Header";
-        TransferShipmentHeader: Record "Transfer Shipment Header";
-        TransferReceiptHeader: Record "Transfer Receipt Header";
+        // TransferShipmentHeader: Record "Transfer Shipment Header";
+        // TransferReceiptHeader: Record "Transfer Receipt Header";
+        DirectTransHdr: Record "Direct Trans. Header";
         SetupMgt: Codeunit "Order Integration Setup Mgt.";
     begin
         if not ImportHeader.FindSet() then
@@ -39,14 +40,15 @@ codeunit 50135 "TO Import Processor"
             if ImportHeader."Transfer Order No." = '' then begin
                 if Codeunit.Run(Codeunit::"TO Import Worker", ImportHeader) then begin
                     ImportHeaderLoc.Get(ImportHeader."Entry No.");
-                    ImportHeader.Status := ImportHeader.Status::Processed;
-                    ImportHeader."Error Message" := '';
-                    TransferShipmentHeader.SetRange("Transfer Order No.", ImportHeader."Transfer Order No.");
-                    TransferShipmentHeader.FindLast();
-                    ImportHeader."Shipment No." := TransferShipmentHeader."No.";
-                    TransferReceiptHeader.SetRange("Transfer Order No.", ImportHeader."Transfer Order No.");
-                    TransferReceiptHeader.FindLast();
-                    ImportHeader."Receipt No." := TransferReceiptHeader."No.";
+                    DirectTransHdr.SetRange("Transfer Order No.", ImportHeaderLoc."Transfer Order No.");
+                    DirectTransHdr.FindLast();
+                    ImportHeaderLoc."Direct Transfer No." := DirectTransHdr."No.";
+                    // TransferShipmentHeader.SetRange("Transfer Order No.", ImportHeader."Transfer Order No.");
+                    // TransferShipmentHeader.FindLast();
+                    // ImportHeaderLoc."Shipment No." := TransferShipmentHeader."No.";
+                    // TransferReceiptHeader.SetRange("Transfer Order No.", ImportHeader."Transfer Order No.");
+                    // TransferReceiptHeader.FindLast();
+                    // ImportHeaderLoc."Receipt No." := TransferReceiptHeader."No.";
                     ImportHeaderLoc.Status := ImportHeaderLoc.Status::Processed;
                     ImportHeaderLoc."Error Message" := '';
                 end else begin

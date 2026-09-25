@@ -36,6 +36,7 @@ codeunit 50140 "TO Import Archive"
         ArchiveHeaderRecord."Transfer Order No." := ImportHeader."Transfer Order No.";
         ArchiveHeaderRecord."Shipment No." := ImportHeader."Shipment No.";
         ArchiveHeaderRecord."Receipt No." := ImportHeader."Receipt No.";
+        ArchiveHeaderRecord."Direct Transfer No." := ImportHeader."Direct Transfer No.";
         ArchiveHeaderRecord."Webhook Status" := ImportHeader."Webhook Status";
         ArchiveHeaderRecord."Webhook Error Message" := ImportHeader."Webhook Error Message";
         ArchiveHeaderRecord."Archived At" := CurrentDateTime();
