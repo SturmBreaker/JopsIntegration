@@ -11,6 +11,10 @@ page 50152 "Order Integration Role Center"
             {
                 ApplicationArea = All;
             }
+            part(UnprocessedImports; "Order Integration Activities")
+            {
+                ApplicationArea = All;
+            }
         }
     }
 

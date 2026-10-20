@@ -1,4 +1,4 @@
-page 50151 "Order Integration Setup"
+page 50105 "Order Integration Setup"
 {
     PageType = Card;
     SourceTable = "Order Integration Setup";
