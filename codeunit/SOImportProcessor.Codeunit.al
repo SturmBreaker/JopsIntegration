@@ -57,13 +57,22 @@ codeunit 50105 "SO Import Processor"
 
             if SetupMgt.IsSalesWebhookEnabled() then begin
                 ImportHeaderLoc.Get(ImportHeader."Entry No.");
-                if Codeunit.Run(Codeunit::"SO Import Webhook", ImportHeader) then begin
-                    ImportHeaderLoc."Webhook Status" := ImportHeaderLoc."Webhook Status"::Sent;
-                    ImportHeaderLoc."Webhook Error Message" := '';
-                end else begin
-                    ImportHeaderLoc."Webhook Status" := ImportHeaderLoc."Webhook Status"::Error;
-                    ImportHeaderLoc."Webhook Error Message" := CopyStr(GetLastErrorText(), 1, MaxStrLen(ImportHeaderLoc."Webhook Error Message"));
-                end;
+                if SetupMgt.IsSalesWebhookBasicAuth() then begin
+                    if Codeunit.Run(Codeunit::"SO Import Webhook Basic", ImportHeader) then begin
+                        ImportHeaderLoc."Webhook Status" := ImportHeaderLoc."Webhook Status"::Sent;
+                        ImportHeaderLoc."Webhook Error Message" := '';
+                    end else begin
+                        ImportHeaderLoc."Webhook Status" := ImportHeaderLoc."Webhook Status"::Error;
+                        ImportHeaderLoc."Webhook Error Message" := CopyStr(GetLastErrorText(), 1, MaxStrLen(ImportHeaderLoc."Webhook Error Message"));
+                    end;
+                end else
+                    if Codeunit.Run(Codeunit::"SO Import Webhook", ImportHeader) then begin
+                        ImportHeaderLoc."Webhook Status" := ImportHeaderLoc."Webhook Status"::Sent;
+                        ImportHeaderLoc."Webhook Error Message" := '';
+                    end else begin
+                        ImportHeaderLoc."Webhook Status" := ImportHeaderLoc."Webhook Status"::Error;
+                        ImportHeaderLoc."Webhook Error Message" := CopyStr(GetLastErrorText(), 1, MaxStrLen(ImportHeaderLoc."Webhook Error Message"));
+                    end;
                 ImportHeaderLoc.Modify(true);
             end;
             Commit();

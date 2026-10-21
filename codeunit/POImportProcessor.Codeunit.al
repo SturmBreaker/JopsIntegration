@@ -59,13 +59,22 @@ codeunit 50118 "PO Import Processor"
 
             if SetupMgt.IsPurchaseWebhookEnabled() then begin
                 ImportHeaderLoc.Get(ImportHeader."Entry No.");
-                if Codeunit.Run(Codeunit::"PO Import Webhook", ImportHeaderLoc) then begin
-                    ImportHeaderLoc."Webhook Status" := ImportHeaderLoc."Webhook Status"::Sent;
-                    ImportHeaderLoc."Webhook Error Message" := '';
-                end else begin
-                    ImportHeaderLoc."Webhook Status" := ImportHeaderLoc."Webhook Status"::Error;
-                    ImportHeaderLoc."Webhook Error Message" := CopyStr(GetLastErrorText(), 1, MaxStrLen(ImportHeaderLoc."Webhook Error Message"));
-                end;
+                if SetupMgt.IsPurchaseWebhookBasicAuth() then begin
+                    if Codeunit.Run(Codeunit::"PO Import Webhook Basic", ImportHeaderLoc) then begin
+                        ImportHeaderLoc."Webhook Status" := ImportHeaderLoc."Webhook Status"::Sent;
+                        ImportHeaderLoc."Webhook Error Message" := '';
+                    end else begin
+                        ImportHeaderLoc."Webhook Status" := ImportHeaderLoc."Webhook Status"::Error;
+                        ImportHeaderLoc."Webhook Error Message" := CopyStr(GetLastErrorText(), 1, MaxStrLen(ImportHeaderLoc."Webhook Error Message"));
+                    end;
+                end else
+                    if Codeunit.Run(Codeunit::"PO Import Webhook", ImportHeaderLoc) then begin
+                        ImportHeaderLoc."Webhook Status" := ImportHeaderLoc."Webhook Status"::Sent;
+                        ImportHeaderLoc."Webhook Error Message" := '';
+                    end else begin
+                        ImportHeaderLoc."Webhook Status" := ImportHeaderLoc."Webhook Status"::Error;
+                        ImportHeaderLoc."Webhook Error Message" := CopyStr(GetLastErrorText(), 1, MaxStrLen(ImportHeaderLoc."Webhook Error Message"));
+                    end;
                 ImportHeaderLoc.Modify(true);
             end;
             Commit();
