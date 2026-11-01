@@ -17,6 +17,11 @@ page 50105 "Order Integration Setup"
                     ApplicationArea = All;
                     ToolTip = 'Specifies whether API integration telemetry is sent to Application Insights.';
                 }
+                field("Enable Real-Time API Processing"; Rec."Enable Real-Time API Processing")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies whether incoming API requests are processed immediately instead of being deferred to the queue.';
+                }
                 field("Enable Sales Posting"; Rec."Enable Sales Posting")
                 {
                     ApplicationArea = All;

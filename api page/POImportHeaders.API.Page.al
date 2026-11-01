@@ -39,9 +39,18 @@ page 50124 "PO Import Headers"
         Payload: JsonObject;
         PayloadText: Text;
         SetupManagement: Codeunit "Order Integration Setup Mgt.";
+        ImportProcessor: Codeunit "PO Import Processor";
     begin
         Rec.Status := Rec.Status::Pending;
         Rec."Received At" := CurrentDateTime();
+
+        if SetupManagement.IsApiRealTimeProcessingEnabled() then begin
+            Rec.Insert();
+            ImportProcessor.ProcessSelected(Rec);
+            Commit();
+            exit(false);
+        end;
+
         if SetupManagement.IsApiTelemetryEnabled() then begin
             Payload.Add('purchaseOrderNo', Rec."Purchase Order No.");
             Payload.WriteTo(PayloadText);
@@ -50,6 +59,7 @@ page 50124 "PO Import Headers"
             CustomDimensions.Add('Payload', PayloadText);
             Session.LogMessage('JOPS-PO-API', 'Purchase order integration request received.', Verbosity::Normal, DataClassification::SystemMetadata, TelemetryScope::ExtensionPublisher, CustomDimensions);
         end;
+
         exit(true);
     end;
 }

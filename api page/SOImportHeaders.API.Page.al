@@ -37,9 +37,18 @@ page 50101 "SO Import Headers"
         Payload: JsonObject;
         PayloadText: Text;
         SetupManagement: Codeunit "Order Integration Setup Mgt.";
+        ImportProcessor: Codeunit "SO Import Processor";
     begin
         Rec.Status := Rec.Status::Pending;
         Rec."Received At" := CurrentDateTime();
+
+        if SetupManagement.IsApiRealTimeProcessingEnabled() then begin
+            Rec.Insert();
+            ImportProcessor.ProcessSelected(Rec);
+            Commit();
+            exit(false);
+        end;
+
         if SetupManagement.IsApiTelemetryEnabled() then begin
             Payload.Add('salesOrderNo', Rec."Sales Order No.");
             Payload.WriteTo(PayloadText);
@@ -48,6 +57,7 @@ page 50101 "SO Import Headers"
             CustomDimensions.Add('Payload', PayloadText);
             Session.LogMessage('JOPS-SO-API', 'Sales order integration request received.', Verbosity::Normal, DataClassification::SystemMetadata, TelemetryScope::ExtensionPublisher, CustomDimensions);
         end;
+
         exit(true);
     end;
 }

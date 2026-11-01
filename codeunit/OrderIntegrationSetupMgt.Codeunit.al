@@ -108,6 +108,16 @@ codeunit 50150 "Order Integration Setup Mgt."
         exit('Basic ' + Base64Convert.ToBase64(UserName + ':' + Password));
     end;
 
+    procedure IsApiRealTimeProcessingEnabled(): Boolean
+    var
+        Setup: Record "Order Integration Setup";
+    begin
+        if not Setup.Get('') then
+            exit(false);
+
+        exit(Setup."Enable Real-Time API Processing");
+    end;
+
     procedure IsApiTelemetryEnabled(): Boolean
     var
         Setup: Record "Order Integration Setup";
