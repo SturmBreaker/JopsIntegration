@@ -74,6 +74,7 @@ page 50103 "SO Import Header List"
                 Caption = 'Process Selected';
                 Image = CreateDocument;
                 promoted = true;
+                PromotedCategory = Process;
                 PromotedIsBig = true;
                 ToolTip = 'Create sales orders from the selected pending staging records.';
 
@@ -93,6 +94,7 @@ page 50103 "SO Import Header List"
                 Caption = 'Archive Staging';
                 Image = Archive;
                 promoted = true;
+                PromotedCategory = Process;
                 PromotedIsBig = true;
                 ToolTip = 'Archive processed and errored staging records using optional date, sales order, and item filters.';
 
@@ -109,6 +111,7 @@ page 50103 "SO Import Header List"
                 Caption = 'Clear Errors';
                 Image = ClearLog;
                 promoted = true;
+                PromotedCategory = Process;
                 PromotedIsBig = true;
                 ToolTip = 'Reset selected sales imports to pending and clear their error messages.';
 

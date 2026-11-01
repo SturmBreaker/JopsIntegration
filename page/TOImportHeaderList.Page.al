@@ -75,6 +75,7 @@ page 50143 "TO Import Header List"
                 Caption = 'Process Selected';
                 Image = CreateDocument;
                 promoted = true;
+                PromotedCategory = Process;
                 PromotedIsBig = true;
                 ToolTip = 'Create transfer orders from the selected pending staging records.';
 
@@ -94,6 +95,7 @@ page 50143 "TO Import Header List"
                 Caption = 'Archive Staging';
                 Image = Archive;
                 promoted = true;
+                PromotedCategory = Process;
                 PromotedIsBig = true;
                 ToolTip = 'Archive processed and errored transfer staging records using optional filters.';
 
@@ -109,6 +111,7 @@ page 50143 "TO Import Header List"
                 Caption = 'Clear Errors';
                 Image = ClearLog;
                 promoted = true;
+                PromotedCategory = Process;
                 PromotedIsBig = true;
                 ToolTip = 'Reset selected transfer imports to pending and clear their error messages.';
 

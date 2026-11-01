@@ -75,6 +75,7 @@ page 50127 "PO Import Header List"
                 Caption = 'Process Selected';
                 Image = CreateDocument;
                 promoted = true;
+                PromotedCategory = Process;
                 PromotedIsBig = true;
                 ToolTip = 'Create purchase orders from the selected pending staging records.';
 
@@ -93,6 +94,7 @@ page 50127 "PO Import Header List"
                 ApplicationArea = All;
                 Caption = 'Archive Staging';
                 promoted = true;
+                PromotedCategory = Process;
                 PromotedIsBig = true;
                 Image = Archive;
                 ToolTip = 'Archive processed and errored purchase staging records using optional filters.';
@@ -110,6 +112,7 @@ page 50127 "PO Import Header List"
                 Caption = 'Clear Errors';
                 Image = ClearLog;
                 promoted = true;
+                PromotedCategory = Process;
                 PromotedIsBig = true;
                 ToolTip = 'Reset selected purchase imports to pending and clear their error messages.';
 
